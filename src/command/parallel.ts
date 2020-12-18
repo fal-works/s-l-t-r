@@ -1,7 +1,6 @@
 import { error } from "../log-and-error";
 import { logDebug, debug, debugLines } from "../debug";
-import { Runner } from "./types";
-import { Command, CommandType } from "./unit";
+import { Command, CommandType, Runner } from "./types";
 import { normalizeCommands, getCommandLines } from "./unit-array";
 
 /** Converts `command` to a `Promise` to be passed to `Promise.all()`. */

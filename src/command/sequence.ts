@@ -1,6 +1,5 @@
 import { logDebug, debug, debugLines } from "../debug";
-import { Runner } from "./types";
-import { Command, CommandType } from "./unit";
+import { Command, CommandType, Runner } from "./types";
 import { normalizeCommands, getCommandLines } from "./unit-array";
 
 /** Validates `commands` and creates a function that runs them in sequence. */

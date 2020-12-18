@@ -1,4 +1,5 @@
-import { Command, normalizeCommand } from "./unit";
+import { normalizeCommand } from "./utility";
+import { Command } from "./types";
 
 const isNonNull = <T>(x: T | null): x is T => x !== null;
 

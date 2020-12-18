@@ -1,25 +1,7 @@
 import { debug } from "../debug";
-import { warn, error, info } from "../log-and-error";
+import { error, info } from "../log-and-error";
 import * as commandLine from "./line";
-import { Runner } from "./types";
-
-/** Value that specifies the type of a `Command` object. */
-export const CommandType = {
-  Unit: "unit",
-  Sequence: "seq",
-  Parallel: "par",
-} as const;
-export type CommandType = typeof CommandType[keyof typeof CommandType];
-
-/**
- * Command object that can be run either in sequence (by `seq()`) or
- * in parallel (by `par()`).
- */
-export type Command = {
-  run: Runner;
-  line: string;
-  type: CommandType;
-};
+import { Command, CommandType, Runner } from "./types";
 
 /** Runs `command` immediately & asynchronously. */
 export const exec = (command: string, ...args: string[]): Promise<void> => {
@@ -32,6 +14,22 @@ export const cmd = (command: string, ...args: string[]): Command => {
   const line = commandLine.create(command, args);
   return {
     run: commandLine.exec.bind(undefined, line),
+    line,
+    type: CommandType.Unit,
+  };
+};
+
+/**
+ * Creates a `Command` unit from any function
+ * that takes no arguments and returns `Promise<void>`.
+ */
+export const cmdFromPromiser = (promiserFunc: Runner): Command => {
+  const line = "(external command)";
+  return {
+    run: () => {
+      debug("run: " + line);
+      return promiserFunc().then(() => info("Done:" + line));
+    },
     line,
     type: CommandType.Unit,
   };
@@ -53,45 +51,5 @@ export const root = async (
   } catch (e) {
     error(e);
     if (onFailure) onFailure();
-  }
-};
-
-/**
- * Creates a `Command` unit from any function
- * that takes no arguments and returns `Promise<void>`.
- */
-export const cmdFromPromiser = (promiserFunc: Runner): Command => {
-  const line = "(external command)";
-  return {
-    run: () => {
-      debug("run: " + line);
-      return promiserFunc().then(() => info("Done:" + line));
-    },
-    line,
-    type: CommandType.Unit,
-  };
-};
-
-/** @returns `true` if `obj` is (maybe) a Command object. */
-const isCommandObject = (obj: Record<string, unknown>): boolean =>
-  typeof obj.run === "function";
-
-const warnNotCommand = (cmdLike: any): void =>
-  warn(`Not a command: ${cmdLike}`);
-
-/** Normalizes the type of `command`. */
-export const normalizeCommand = (command: Command | string): Command | null => {
-  switch (typeof command) {
-    case "string":
-      return cmd(command);
-    case "object":
-      if (!isCommandObject(command)) {
-        warnNotCommand(command);
-        return null;
-      }
-      return command;
-    default:
-      warnNotCommand(command);
-      return null;
   }
 };
