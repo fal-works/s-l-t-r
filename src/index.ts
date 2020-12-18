@@ -9,5 +9,6 @@
 
 "use strict";
 
-export { cmd, exec, seq, par } from "./command";
+export * from "./command";
 export { config } from "./config";
+export * as debug from "./debug/public";

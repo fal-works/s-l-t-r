@@ -1,2 +1,11 @@
-export { cmd, exec } from "./unit";
-export { seq, par } from "./group";
+export {
+  Command,
+  CommandType,
+  exec,
+  cmd,
+  cmdFromPromiser,
+  echo,
+  root,
+} from "./unit";
+export { seq } from "./sequence";
+export { par } from "./parallel";
