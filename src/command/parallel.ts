@@ -32,9 +32,11 @@ const createRunPar = (commands: Command[]): Runner => {
 
 /** Creates a `Command` object that runs given commands in parallel. */
 export const par = (...commands: (Command | string)[]): Command => {
+  const children = normalizeCommands(commands);
   return {
     line: "(parallel)",
-    run: createRunPar(normalizeCommands(commands)),
+    run: createRunPar(children),
     type: CommandType.Parallel,
+    children,
   };
 };

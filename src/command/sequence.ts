@@ -18,9 +18,11 @@ const createRunSeq = (commands: Command[]): Runner => {
 
 /** Creates a `Command` object that runs given commands in sequence. */
 export const seq = (...commands: (Command | string)[]): Command => {
+  const children = normalizeCommands(commands);
   return {
     line: "(sequence)",
-    run: createRunSeq(normalizeCommands(commands)),
+    run: createRunSeq(children),
     type: CommandType.Sequence,
+    children,
   };
 };

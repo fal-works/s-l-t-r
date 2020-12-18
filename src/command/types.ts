@@ -17,4 +17,5 @@ export type Command = {
   run: Runner;
   line: string;
   type: CommandType;
+  children?: Command[];
 };
