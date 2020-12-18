@@ -20,11 +20,15 @@ export const cmd = (command: string, ...args: string[]): Command => {
 };
 
 /**
- * Creates a `Command` unit from any function
- * that takes no arguments and returns `Promise<void>`.
+ * Creates a `Command` unit from an asynchronous function.
+ * @param promiserFunc Any function of type `() => Promise<void>`.
+ * @param name Name for displaying instead of an actual command line.
  */
-export const cmdFromPromiser = (promiserFunc: Runner): Command => {
-  const line = "(external command)";
+export const cmdFromPromiser = (
+  promiserFunc: Runner,
+  name = "(external command)"
+): Command => {
+  const line = name;
   return {
     run: () => {
       debug("run: " + line);
