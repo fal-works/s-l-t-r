@@ -1,4 +1,4 @@
-import { Command, Event, EventRecord } from "./types";
+import { Command, Event, EventRecord } from "../types";
 
 /** Object for recording multiple `EventRecord`s. */
 export interface Recorder {

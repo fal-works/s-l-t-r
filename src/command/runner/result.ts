@@ -4,9 +4,9 @@ import {
   Event,
   EventRecord,
   ResultSummaryType,
-} from "./types";
+} from "../types";
+import { depthFirstSearch } from "../tools";
 import { Recorder } from "./record";
-import { depthFirstSearch } from "./traverse";
 
 const getResultType = (history: EventRecord[]): string => {
   const last = history[history.length - 1];

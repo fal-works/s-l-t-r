@@ -1,4 +1,4 @@
-import { error, log, newLine } from "../log";
+import { error, log, newLine } from "../../log";
 import {
   Command,
   Event,
@@ -6,10 +6,10 @@ import {
   CommandType,
   EventRecord,
   ResultSummaryType,
-} from "./types";
+} from "../types";
+import { countUnitCommands } from "../tools/traverse";
 import { createRecorder } from "./record";
 import { renderResultSummary } from "./result";
-import { countUnitCommands } from "./traverse";
 
 /**
  * Runs any `command` in a `try-catch` block.

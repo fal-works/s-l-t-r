@@ -1,6 +1,6 @@
 import { warn } from "../../log";
 import { Command } from "../types";
-import { cmd } from "../unit/line";
+import { cmd } from "./line";
 
 /** Normalizes the type of `command`. */
 const normalizeCommand = (command: Command | string): Command | null => {

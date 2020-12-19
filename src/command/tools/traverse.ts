@@ -1,4 +1,4 @@
-import { Command, CommandType } from "./types";
+import { Command, CommandType } from "../types";
 
 /**
  * Runs `callback` for `topCommand` and all of its descendants
