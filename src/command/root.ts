@@ -1,3 +1,4 @@
+import { error, log, newLine } from "../log";
 import { Command } from "./command";
 import { ExecState, Reporter, ExecStateMap } from "./types";
 import { renderExecStateTree } from "./state-map";
@@ -19,19 +20,21 @@ export const root = async (
     stateMap.set(command, state);
   };
 
+  log("Start running commands...");
+
   try {
     await command.run(report);
-    console.log("[s-l-t-r] Successfully completed.");
+    log("Successfully completed.");
     if (onSuccessAll) onSuccessAll();
   } catch (e) {
-    console.error(e);
+    error(e);
     if (onFailure) onFailure();
   }
 
   if (renderResultSummary) {
-    console.log("");
+    newLine();
     renderExecStateTree(command, stateMap);
-    console.log("");
+    newLine();
   }
 
   return stateMap;

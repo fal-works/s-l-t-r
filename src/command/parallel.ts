@@ -1,4 +1,5 @@
 import { logDebug, debug, debugLines } from "../debug";
+import { error } from "../log";
 import { CommandType, ExecState, Reporter } from "./types";
 import { Command } from "./command";
 import { normalizeCommands, getCommandNames } from "./utility";
@@ -9,7 +10,7 @@ const runCommandInPar = (report: Reporter) => (command: Command) =>
     command.run(report).then(
       () => resolve(false),
       (e) => {
-        console.error(e);
+        error(e);
         resolve(true);
       }
     )
