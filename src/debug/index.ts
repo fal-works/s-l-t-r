@@ -17,3 +17,7 @@ export const debugLines = (lines: string[], linePrefix = ""): void => {
   for (const line of lines)
     process.stdout.write(`[s-l-t-r] [debug] ${linePrefix + line}\n`);
 };
+
+export const traceRun = (s: string): void => debug("run:  " + s);
+export const traceDone = (s: string): void => debug("done: " + s);
+export const traceRunDone = (s: string): void => debug("run>done: " + s);

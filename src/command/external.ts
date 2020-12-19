@@ -1,6 +1,6 @@
 import { CommandType, ExecState, Reporter } from "./types";
 import { Command } from "./command";
-import { debug } from "../debug";
+import { traceDone, traceRun } from "../debug";
 
 /** `Command` that runs an external asynchronous function. */
 interface ExternalCommand extends Command {
@@ -13,10 +13,10 @@ const runUnitExternal = function (
   report: Reporter
 ): Promise<void> {
   const { runner, name } = this;
-  debug("run: " + name);
+  traceRun(name);
   return runner().then(
     () => {
-      debug("done:" + name);
+      traceDone(name);
       report(this, ExecState.Complete);
     },
     (reason) => {

@@ -2,7 +2,7 @@ import * as util from "util";
 import * as child_process from "child_process";
 
 import { env } from "./environment";
-import { debug } from "./debug";
+import { traceDone, traceRun, traceRunDone } from "./debug";
 
 const promiseExec = util.promisify(child_process.exec);
 const onFullFilledExec = (params: { stdout: string; stderr: string }): void => {
@@ -31,9 +31,9 @@ export const exec = async (
   ...args: string[]
 ): Promise<void> => {
   const line = create(command, args);
-  debug("run: " + line);
+  traceRun(line);
   await execLineWithoutLog(line);
-  debug("done: " + line);
+  traceDone(line);
 };
 
 /**
@@ -42,6 +42,6 @@ export const exec = async (
  */
 export const execNull = (command: string, ...args: string[]): Promise<void> => {
   const line = create(command, args);
-  debug("run>done: " + line);
+  traceRunDone(line);
   return Promise.resolve();
 };

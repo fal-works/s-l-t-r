@@ -1,7 +1,7 @@
 import * as commandLine from "../command-line";
 import { CommandType, ExecState, Reporter } from "./types";
 import { Command } from "./command";
-import { debug } from "../debug";
+import { traceDone, traceRun } from "../debug";
 
 /** `Command` that runs a single command line. */
 interface LineCommand extends Command {
@@ -11,10 +11,10 @@ interface LineCommand extends Command {
 /** `run()` method for `LineCommand`. */
 const runUnit = function (this: LineCommand, report: Reporter): Promise<void> {
   const { line, name } = this;
-  debug("run: " + name);
+  traceRun(name);
   return commandLine.execLineWithoutLog(line).then(
     () => {
-      debug("done:" + name);
+      traceDone(name);
       report(this, ExecState.Complete);
     },
     (reason) => {

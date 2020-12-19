@@ -1,14 +1,14 @@
 import { Command, CommandType } from "../command";
 import * as commandLine from "../command-line";
 import { ExecState, Reporter } from "../command/types";
-import { debug } from "../debug";
+import { traceRunDone } from "../debug";
 
 /**
  * `run()` method for `nullCmd()`.
  * Emits debug log and does nothing else.
  */
 const runNull = function (this: Command, report: Reporter) {
-  debug("run>done: " + this.name);
+  traceRunDone(this.name);
   report(this, ExecState.Complete);
   return Promise.resolve();
 };
