@@ -1,4 +1,4 @@
-import { CommandType, ExecState, Reporter } from "./types";
+import { CommandType, CommandEvent, CommandEventHandler } from "./types";
 import { Command } from "./command";
 import { traceDone, traceRun } from "../debug";
 
@@ -10,17 +10,17 @@ interface ExternalCommand extends Command {
 /** `run()` method for `ExternalCommand`. */
 const runUnitExternal = function (
   this: ExternalCommand,
-  report: Reporter
+  onEvent: CommandEventHandler
 ): Promise<void> {
   const { runner, name } = this;
   traceRun(name);
   return runner().then(
     () => {
       traceDone(name);
-      report(this, ExecState.Complete);
+      onEvent(this, CommandEvent.Complete);
     },
     (reason) => {
-      report(this, ExecState.Failed);
+      onEvent(this, CommandEvent.Failure);
       return Promise.reject(reason);
     }
   );

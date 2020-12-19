@@ -1,9 +1,9 @@
-import { CommandType, Reporter } from "./types";
+import { CommandType, CommandEventHandler } from "./types";
 
 /** Command object. Can be wrapped with `seq()` or `par()`. */
 export interface Command {
   readonly name: string;
-  readonly run: (report: Reporter) => Promise<void>;
+  readonly run: (onEvent: CommandEventHandler) => Promise<void>;
   readonly type: CommandType;
   readonly children?: Command[];
 }

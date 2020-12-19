@@ -1,7 +1,7 @@
 import { error, log, newLine } from "../log";
 import { Command } from "./command";
-import { ExecState, Reporter, ExecStateMap, CommandType } from "./types";
-import { renderExecStateTree } from "./state-map";
+import { CommandEvent, CommandEventHandler, CommandType } from "./types";
+import { renderResultTree } from "./result";
 import { depthFirstSearch } from "./utility";
 
 const countUnitCommands = (rootCommand: Command): number => {
@@ -18,24 +18,29 @@ const countUnitCommands = (rootCommand: Command): number => {
 export const root = async (
   command: Command,
   renderResultSummary = true,
-  onProgress?: (command: Command, state: ExecState) => void,
+  onEvent?: (command: Command, event: CommandEvent) => void,
   onSuccessAll?: () => void,
   onFailureAny?: () => void
-): Promise<ExecStateMap> => {
+): Promise<Map<Command, CommandEvent>> => {
   const numTotal = countUnitCommands(command);
   let numComplete = 0;
 
-  const stateMap: ExecStateMap = new Map<Command, ExecState>();
-  const onReport: Reporter = onProgress || (() => {});
-  const report: Reporter = (command, state) => {
-    onReport(command, state);
-    stateMap.set(command, state);
-    if (command.type === CommandType.Unit && state === ExecState.Complete)
+  const stateMap = new Map<Command, CommandEvent>();
+  const recordEvent: CommandEventHandler = (command, event): void => {
+    stateMap.set(command, event);
+    if (command.type === CommandType.Unit && event === CommandEvent.Complete)
       log(`done ${(numComplete += 1)} / ${numTotal}`);
   };
 
+  const eventHandler: CommandEventHandler = onEvent
+    ? (command, event) => {
+        recordEvent(command, event);
+        onEvent(command, event);
+      }
+    : recordEvent;
+
   try {
-    await command.run(report);
+    await command.run(eventHandler);
     if (onSuccessAll) onSuccessAll();
   } catch (e) {
     error(e);
@@ -44,7 +49,7 @@ export const root = async (
 
   if (renderResultSummary) {
     newLine();
-    renderExecStateTree(command, stateMap);
+    renderResultTree(command, stateMap);
     newLine();
   }
 

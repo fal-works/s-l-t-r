@@ -1,6 +1,6 @@
 import { logDebug, debug, debugLines } from "../debug";
 import { Command } from "./command";
-import { CommandType, ExecState, Reporter } from "./types";
+import { CommandType, CommandEvent, CommandEventHandler } from "./types";
 import { normalizeCommands, getCommandNames } from "./utility";
 
 interface SequenceCommand extends Command {
@@ -9,14 +9,17 @@ interface SequenceCommand extends Command {
 }
 
 /** `run()` method for `SequenceCommand`. */
-const runSeq = function (this: SequenceCommand, report: Reporter) {
+const runSeq = function (
+  this: SequenceCommand,
+  onEvent: CommandEventHandler
+): Promise<void> {
   let current = Promise.resolve();
   for (const child of this.children)
-    current = current.then(child.run.bind(child, report));
+    current = current.then(child.run.bind(child, onEvent));
   return current.then(
-    () => report(this, ExecState.Complete),
+    () => onEvent(this, CommandEvent.Complete),
     (reason) => {
-      report(this, ExecState.Failed);
+      onEvent(this, CommandEvent.Failure);
       return Promise.reject(reason);
     }
   );

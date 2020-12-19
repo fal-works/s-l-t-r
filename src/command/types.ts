@@ -7,16 +7,16 @@ export const CommandType = {
 } as const;
 export type CommandType = typeof CommandType[keyof typeof CommandType];
 
-/** Execution state of a `Command` object. */
-export const ExecState = {
-  NotRun: "-",
-  Complete: "ok",
-  Failed: "err",
+/** Event fired by `Command` objects. */
+export const CommandEvent = {
+  Start: "start",
+  Complete: "complete",
+  Failure: "failure",
 } as const;
-export type ExecState = typeof ExecState[keyof typeof ExecState];
+export type CommandEvent = typeof CommandEvent[keyof typeof CommandEvent];
 
-/** Function for reporting execution state of a command. */
-export type Reporter = (command: Command, state: ExecState) => void;
-
-/** Mapping between `Command` and `ExecState`. */
-export type ExecStateMap = Map<Command, ExecState>;
+/** Function for hadnling command events. */
+export type CommandEventHandler = (
+  command: Command,
+  event: CommandEvent
+) => void;

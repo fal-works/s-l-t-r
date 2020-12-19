@@ -1,13 +1,13 @@
 import { logDebug, debug, debugLines } from "../debug";
 import { error } from "../log";
-import { CommandType, ExecState, Reporter } from "./types";
+import { CommandType, CommandEvent, CommandEventHandler } from "./types";
 import { Command } from "./command";
 import { normalizeCommands, getCommandNames } from "./utility";
 
 /** Converts `command` to a `Promise` to be passed to `Promise.all()`. */
-const runCommandInPar = (report: Reporter) => (command: Command) =>
+const runCommandInPar = (onEvent: CommandEventHandler) => (command: Command) =>
   new Promise<boolean>((resolve: (failed: boolean) => void) =>
-    command.run(report).then(
+    command.run(onEvent).then(
       () => resolve(false),
       (e) => {
         error(e);
@@ -22,16 +22,19 @@ interface ParallelCommand extends Command {
 }
 
 /** `run()` method for `ParallelCommand`. */
-const runPar = async function (this: ParallelCommand, report: Reporter) {
-  const promises = this.children.map(runCommandInPar(report));
+const runPar = async function (
+  this: ParallelCommand,
+  onEvent: CommandEventHandler
+): Promise<void> {
+  const promises = this.children.map(runCommandInPar(onEvent));
   const errors = await Promise.all(promises);
   for (const err of errors) {
     if (err) {
-      report(this, ExecState.Failed);
+      onEvent(this, CommandEvent.Failure);
       return Promise.reject("Found error in parallel commands.");
     }
   }
-  report(this, ExecState.Complete);
+  onEvent(this, CommandEvent.Complete);
 };
 
 /** Emits debug log. */
