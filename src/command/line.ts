@@ -14,7 +14,10 @@ const runUnit = function (this: LineCommand, report: Reporter): Promise<void> {
   const { line, name } = this;
   debug("run: " + name);
   return commandLine.execLineWithoutLog(line).then(
-    () => info("Done:" + name),
+    () => {
+      info("Done:" + name);
+      report(this, ExecState.Complete);
+    },
     (reason) => {
       report(this, ExecState.Failed);
       return Promise.reject(reason);

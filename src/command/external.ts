@@ -16,7 +16,10 @@ const runUnitExternal = function (
   const { runner, name } = this;
   debug("run: " + name);
   return runner().then(
-    () => info("Done:" + name),
+    () => {
+      info("Done:" + name);
+      report(this, ExecState.Complete);
+    },
     (reason) => {
       report(this, ExecState.Failed);
       return Promise.reject(reason);

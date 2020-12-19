@@ -1,6 +1,6 @@
 import { logDebug, debug, debugLines } from "../debug";
 import { Command } from "./command";
-import { CommandType, Reporter } from "./types";
+import { CommandType, ExecState, Reporter } from "./types";
 import { normalizeCommands, getCommandNames } from "./utility";
 
 interface SequenceCommand extends Command {
@@ -13,7 +13,13 @@ const runSeq = function (this: SequenceCommand, report: Reporter) {
   let current = Promise.resolve();
   for (const child of this.children)
     current = current.then(child.run.bind(child, report));
-  return current;
+  return current.then(
+    () => report(this, ExecState.Complete),
+    (reason) => {
+      report(this, ExecState.Failed);
+      Promise.reject(reason);
+    }
+  );
 };
 
 /** Emits debug log. */
@@ -30,8 +36,8 @@ export const seq = (...commands: (Command | string)[]): SequenceCommand => {
   inspectCommands(children);
   return {
     run: runSeq,
-    type: CommandType.Sequence,
+    type: CommandType.Group,
     children,
-    name: "(sequence)",
+    name: "[seq]",
   };
 };

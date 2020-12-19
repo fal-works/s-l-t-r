@@ -1,19 +1,39 @@
 import { info, error } from "../log-and-error";
 import { Command } from "./command";
+import { ExecState, Reporter, ExecStateMap } from "./types";
+import { renderExecStateTree } from "./state-map";
 
-/** Runs `command` in a `try-catch` block. */
+/**
+ * Runs `command` as the root in a `try-catch` block.
+ */
 export const root = async (
-  rootCommand: Command,
-  onSuccess?: () => void,
+  command: Command,
+  renderResultSummary = true,
+  onProgress?: (command: Command, state: ExecState) => void,
+  onSuccessAll?: () => void,
   onFailure?: () => void
-): Promise<void> => {
-  const report = () => {};
+): Promise<ExecStateMap> => {
+  const stateMap: ExecStateMap = new Map<Command, ExecState>();
+  const onReport: Reporter = onProgress || (() => {});
+  const report: Reporter = (command, state) => {
+    onReport(command, state);
+    stateMap.set(command, state);
+  };
+
   try {
-    await rootCommand.run(report);
+    await command.run(report);
     info("Successfully completed.");
-    if (onSuccess) onSuccess();
+    if (onSuccessAll) onSuccessAll();
   } catch (e) {
     error(e);
     if (onFailure) onFailure();
   }
+
+  if (renderResultSummary) {
+    process.stdout.write("[s-l-t-r] Result:\n\n");
+    renderExecStateTree(command, stateMap);
+    process.stdout.write("\n");
+  }
+
+  return stateMap;
 };

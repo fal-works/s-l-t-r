@@ -1,6 +1,6 @@
 import { error } from "../log-and-error";
 import { logDebug, debug, debugLines } from "../debug";
-import { CommandType, Reporter } from "./types";
+import { CommandType, ExecState, Reporter } from "./types";
 import { Command } from "./command";
 import { normalizeCommands, getCommandNames } from "./utility";
 
@@ -25,8 +25,13 @@ interface ParallelCommand extends Command {
 const runPar = async function (this: ParallelCommand, report: Reporter) {
   const promises = this.children.map(runCommandInPar(report));
   const errors = await Promise.all(promises);
-  for (const err of errors)
-    if (err) return Promise.reject("Found error in parallel commands.");
+  for (const err of errors) {
+    if (err) {
+      report(this, ExecState.Failed);
+      return Promise.reject("Found error in parallel commands.");
+    }
+  }
+  report(this, ExecState.Complete);
 };
 
 /** Emits debug log. */
@@ -42,8 +47,8 @@ export const par = (...commands: (Command | string)[]): ParallelCommand => {
   inspectCommands(children);
   return {
     run: runPar,
-    type: CommandType.Parallel,
+    type: CommandType.Group,
     children,
-    name: "(parallel)",
+    name: "[par]",
   };
 };
