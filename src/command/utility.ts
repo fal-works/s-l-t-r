@@ -34,12 +34,13 @@ export const getCommandNames = (commands: Command[]): string[] =>
  */
 export const depthFirstSearch = (
   command: Command,
-  callback: (command: Command) => any,
+  callback: (command: Command, depth: number) => any,
   currentDepth = 0
 ): void => {
-  callback(command);
+  callback(command, currentDepth);
   if (!command.children) return;
-  const childrenDepth = currentDepth + 1;
+
+  const childDepth = currentDepth + 1;
   for (const child of command.children)
-    depthFirstSearch(child, callback, childrenDepth);
+    depthFirstSearch(child, callback, childDepth);
 };
