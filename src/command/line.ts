@@ -1,31 +1,37 @@
-import * as util from "util";
-import * as child_process from "child_process";
-
 import { info } from "../log-and-error";
+import * as commandLine from "../command-line";
+import { CommandType, ExecState, Reporter } from "./types";
+import { Command } from "./command";
 import { debug } from "../debug";
-import { env } from "../config";
 
-const promiseExec = util.promisify(child_process.exec);
-const onFullFilledExec = (params: { stdout: string; stderr: string }): void => {
-  process.stdout.write(params.stdout);
-  process.stderr.write(params.stderr);
-};
-const childOptions: child_process.ExecOptions = { env };
+/** `Command` that runs a single command line. */
+interface LineCommand extends Command {
+  line: string;
+}
 
-/** Creates a command line string by joining arguments. */
-export const create = (command: string, args: string[]): string => {
-  if (args.length) return [command].concat(args).join(" ");
-  return command;
-};
-
-/** Runs a command line immediately & asynchronously. */
-export const exec = (line: string): Promise<void> => {
-  debug("run: " + line);
-  return promiseExec(line, childOptions).then(
-    (params) => {
-      onFullFilledExec(params);
-      info(`Done: ${line}`);
-    },
-    () => Promise.reject(`Command failed: ${line}`)
+/** `run()` method for `LineCommand`. */
+const runUnit = function (this: LineCommand, report: Reporter): Promise<void> {
+  const { line, name } = this;
+  debug("run: " + name);
+  return commandLine.execLineWithoutLog(line).then(
+    () => info("Done:" + name),
+    (reason) => {
+      report(this, ExecState.Failed);
+      return Promise.reject(reason);
+    }
   );
 };
+
+/** Creates a `Command` unit. */
+export const cmd = (command: string, ...args: string[]): LineCommand => {
+  const line = commandLine.create(command, args);
+  return {
+    name: line,
+    run: runUnit,
+    type: CommandType.Unit,
+    line,
+  };
+};
+
+/** Creates an `echo` command (does not be run immediately). */
+export const echo = (s: string): Command => cmd("echo", s);

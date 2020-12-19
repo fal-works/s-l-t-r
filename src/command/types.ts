@@ -1,5 +1,4 @@
-/** Function that runs any command and returns a `Promise`. */
-export type Runner = () => Promise<void>;
+import { Command } from "./command";
 
 /** Value that specifies the type of a `Command` object. */
 export const CommandType = {
@@ -9,13 +8,13 @@ export const CommandType = {
 } as const;
 export type CommandType = typeof CommandType[keyof typeof CommandType];
 
-/**
- * Command object that can be run either in sequence (by `seq()`) or
- * in parallel (by `par()`).
- */
-export type Command = {
-  run: Runner;
-  line: string;
-  type: CommandType;
-  children?: Command[];
-};
+/** Execution state of a `Command` object. */
+export const ExecState = {
+  NotRun: "-",
+  Complete: "ok",
+  Failed: "err",
+} as const;
+export type ExecState = typeof ExecState[keyof typeof ExecState];
+
+/** Function for reporting execution state of a command. */
+export type Reporter = (command: Command, state: ExecState) => void;

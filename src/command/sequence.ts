@@ -1,28 +1,37 @@
 import { logDebug, debug, debugLines } from "../debug";
-import { Command, CommandType, Runner } from "./types";
-import { normalizeCommands, getCommandLines } from "./unit-array";
+import { Command } from "./command";
+import { CommandType, Reporter } from "./types";
+import { normalizeCommands, getCommandNames } from "./utility";
 
-/** Validates `commands` and creates a function that runs them in sequence. */
-const createRunSeq = (commands: Command[]): Runner => {
+interface SequenceCommand extends Command {
+  children: Command[];
+  name: string;
+}
+
+/** `run()` method for `SequenceCommand`. */
+const runSeq = function (this: SequenceCommand, report: Reporter) {
+  let current = Promise.resolve();
+  for (const child of this.children)
+    current = current.then(child.run.bind(child, report));
+  return current;
+};
+
+/** Emits debug log. */
+const inspectCommands = (commands: Command[]): void => {
   if (logDebug) {
     debug("prepare sequence:");
-    debugLines(getCommandLines(commands), "  ");
+    debugLines(getCommandNames(commands), "  ");
   }
-
-  return () => {
-    let current = Promise.resolve();
-    commands.forEach((command) => (current = current.then(command.run)));
-    return current;
-  };
 };
 
 /** Creates a `Command` object that runs given commands in sequence. */
-export const seq = (...commands: (Command | string)[]): Command => {
+export const seq = (...commands: (Command | string)[]): SequenceCommand => {
   const children = normalizeCommands(commands);
+  inspectCommands(children);
   return {
-    line: "(sequence)",
-    run: createRunSeq(children),
+    run: runSeq,
     type: CommandType.Sequence,
     children,
+    name: "(sequence)",
   };
 };

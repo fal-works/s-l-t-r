@@ -1,12 +1,13 @@
 import { error } from "../log-and-error";
 import { logDebug, debug, debugLines } from "../debug";
-import { Command, CommandType, Runner } from "./types";
-import { normalizeCommands, getCommandLines } from "./unit-array";
+import { CommandType, Reporter } from "./types";
+import { Command } from "./command";
+import { normalizeCommands, getCommandNames } from "./utility";
 
 /** Converts `command` to a `Promise` to be passed to `Promise.all()`. */
-const runCommandInPar = (command: Command) =>
+const runCommandInPar = (report: Reporter) => (command: Command) =>
   new Promise<boolean>((resolve: (failed: boolean) => void) =>
-    command.run().then(
+    command.run(report).then(
       () => resolve(false),
       (e) => {
         error(e);
@@ -15,28 +16,34 @@ const runCommandInPar = (command: Command) =>
     )
   );
 
-/** Creates a function that runs all commands in parallel. */
-const createRunPar = (commands: Command[]): Runner => {
-  if (logDebug) {
-    debug("prepare parallel:");
-    debugLines(getCommandLines(commands), "  ");
-  }
+interface ParallelCommand extends Command {
+  children: Command[];
+  name: string;
+}
 
-  return async () => {
-    const promises = commands.map(runCommandInPar);
-    const errors = await Promise.all(promises);
-    for (const err of errors)
-      if (err) return Promise.reject("Found error in parallel commands.");
-  };
+/** `run()` method for `ParallelCommand`. */
+const runPar = async function (this: ParallelCommand, report: Reporter) {
+  const promises = this.children.map(runCommandInPar(report));
+  const errors = await Promise.all(promises);
+  for (const err of errors)
+    if (err) return Promise.reject("Found error in parallel commands.");
+};
+
+/** Emits debug log. */
+const inspectCommands = (commands: Command[]): void => {
+  if (!logDebug) return;
+  debug("prepare parallel:");
+  debugLines(getCommandNames(commands), "  ");
 };
 
 /** Creates a `Command` object that runs given commands in parallel. */
-export const par = (...commands: (Command | string)[]): Command => {
+export const par = (...commands: (Command | string)[]): ParallelCommand => {
   const children = normalizeCommands(commands);
+  inspectCommands(children);
   return {
-    line: "(parallel)",
-    run: createRunPar(children),
+    run: runPar,
     type: CommandType.Parallel,
     children,
+    name: "(parallel)",
   };
 };

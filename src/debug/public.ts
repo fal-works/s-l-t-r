@@ -1,1 +1,1 @@
-export { emitVerboseLog, execNull, nullCmd } from "./";
+export { emitVerboseLog } from "./";
