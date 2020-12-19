@@ -1,7 +1,7 @@
 const sltr = require("../lib");
 const { run, echo, seq, par } = sltr;
 
-// sltr.config.resultSummaryType = "list";
+// sltr.config.setResultSummaryType("list");
 
 run(
   par(

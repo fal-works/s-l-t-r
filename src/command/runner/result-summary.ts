@@ -1,4 +1,4 @@
-import { ResultSummaryType, config } from "../../config";
+import { ResultSummaryType, resultSummaryType } from "../../config";
 import {
   Command,
   CommandSubType,
@@ -131,7 +131,7 @@ export const renderResultSummary = (
   topCommand: Command,
   recorder: Recorder
 ): void => {
-  switch (config.resultSummaryType) {
+  switch (resultSummaryType) {
     case ResultSummaryType.Tree:
       renderResultTree(topCommand, recorder);
       break;
@@ -143,6 +143,6 @@ export const renderResultSummary = (
     case undefined:
       break;
     default:
-      warn(`Unknown result summary type: ${config.resultSummaryType}`);
+      warn(`Unknown result summary type: ${resultSummaryType}`);
   }
 };

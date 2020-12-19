@@ -10,14 +10,14 @@ Something Like a Task Runner.
 
 ## Install
 
-```sh
+```text
 npm install @fal-works/s-l-t-r
 ```
 
 
 ## Usage Example
 
-The build script for `s-l-t-r` itself looks like this:
+The script for building the library `s-l-t-r` itself looks like this:
 
 ```js
 /** import */
@@ -79,7 +79,7 @@ ok   1.24s |     eslint --fix types/**/*.ts
 ...or it can also be flattend by changing the config:
 
 ```js
-sltr.config.resultSummaryType = "list"; // default: "tree"
+sltr.config.setResultSummaryType("list"); // default: "tree"
 ```
 
 ```text

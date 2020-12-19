@@ -1,5 +1,5 @@
 import { error, log, newLine } from "../../log";
-import { config } from "../../config";
+import { resultSummaryType } from "../../config";
 import { Command, Event, EventHandler, CommandType, Result } from "../types";
 import { countUnitCommands } from "../tools/traverse";
 import { createRecorder } from "./record";
@@ -40,7 +40,7 @@ export const run = async (
     if (onFailureAny) onFailureAny();
   }
 
-  if (config.resultSummaryType) {
+  if (resultSummaryType) {
     newLine();
     renderResultSummary(command, recorder);
     newLine();

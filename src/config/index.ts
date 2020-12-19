@@ -5,11 +5,9 @@ export const ResultSummaryType = {
 } as const;
 export type ResultSummaryType = typeof ResultSummaryType[keyof typeof ResultSummaryType];
 
-interface Config {
-  /** Type of result summary display. Set `null` for disabling. */
-  resultSummaryType: ResultSummaryType | null;
-}
+export let resultSummaryType: ResultSummaryType | null = ResultSummaryType.Tree;
 
-export const config: Config = {
-  resultSummaryType: ResultSummaryType.Tree,
+/** Sets the type of result summary display. Set `null` for disabling. */
+export const setResultSummaryType = (type: ResultSummaryType | null): void => {
+  resultSummaryType = type;
 };
