@@ -5,6 +5,6 @@ export { cmdEx } from "./external";
 export { seq } from "./sequence";
 export { par } from "./parallel";
 export { nullCmd } from "./null-command";
-export { root } from "./root";
+export { run } from "./run";
 
 export { depthFirstSearch } from "./utility";

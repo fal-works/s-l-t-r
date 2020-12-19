@@ -4,9 +4,9 @@ import { renderResultTree } from "./result";
 import { countUnitCommands } from "./utility";
 
 /**
- * Runs `command` as the root in a `try-catch` block.
+ * Runs any `command` in a `try-catch` block.
  */
-export const root = async (
+export const run = async (
   command: Command,
   renderResultSummary = true,
   onEvent?: (command: Command, event: Event) => void,
