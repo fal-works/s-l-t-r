@@ -1,12 +1,8 @@
-import {
-  Command,
-  CommandType,
-  Event,
-  EventRecord,
-  ResultSummaryType,
-} from "../types";
+import { ResultSummaryType, config } from "../../config";
+import { Command, CommandType, Event, EventRecord } from "../types";
 import { depthFirstSearch } from "../tools";
 import { Recorder } from "./record";
+import { warn } from "../../log";
 
 const getResultType = (history: EventRecord[]): string => {
   const last = history[history.length - 1];
@@ -101,15 +97,20 @@ const renderResultTree = (topCommand: Command, recorder: Recorder): void => {
 /** Writes result summary into standard output. */
 export const renderResultSummary = (
   topCommand: Command,
-  recorder: Recorder,
-  type: ResultSummaryType
+  recorder: Recorder
 ): void => {
-  switch (type) {
+  switch (config.resultSummaryType) {
     case ResultSummaryType.Tree:
       renderResultTree(topCommand, recorder);
       break;
     case ResultSummaryType.List:
       renderResultList(topCommand, recorder);
       break;
+    case null:
+      break;
+    case undefined:
+      break;
+    default:
+      warn(`Unknown result summary type: ${config.resultSummaryType}`);
   }
 };

@@ -29,10 +29,3 @@ export interface EventRecord {
   event: Event;
   timestamp: number;
 }
-
-/** Type of result summary display. */
-export const ResultSummaryType = {
-  Tree: "tree",
-  List: "list",
-} as const;
-export type ResultSummaryType = typeof ResultSummaryType[keyof typeof ResultSummaryType];

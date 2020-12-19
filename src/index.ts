@@ -11,4 +11,6 @@
 
 export { exec, execNull } from "./command-line";
 export * from "./command";
+
+export * from "./config";
 export * as debug from "./debug/public";

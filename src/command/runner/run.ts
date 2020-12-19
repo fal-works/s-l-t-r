@@ -1,11 +1,11 @@
 import { error, log, newLine } from "../../log";
+import { config } from "../../config";
 import {
   Command,
   Event,
   EventHandler,
   CommandType,
   EventRecord,
-  ResultSummaryType,
 } from "../types";
 import { countUnitCommands } from "../tools/traverse";
 import { createRecorder } from "./record";
@@ -16,7 +16,6 @@ import { renderResultSummary } from "./result";
  */
 export const run = async (
   command: Command,
-  resultSummaryType = ResultSummaryType.Tree,
   onEvent?: (command: Command, event: Event) => void,
   onSuccessAll?: () => void,
   onFailureAny?: () => void
@@ -47,9 +46,9 @@ export const run = async (
     if (onFailureAny) onFailureAny();
   }
 
-  if (resultSummaryType) {
+  if (config.resultSummaryType) {
     newLine();
-    renderResultSummary(command, recorder, resultSummaryType);
+    renderResultSummary(command, recorder);
     newLine();
   }
 
