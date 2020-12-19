@@ -31,10 +31,8 @@ export const root = async (
     onReport(command, state);
     stateMap.set(command, state);
     if (command.type === CommandType.Unit && state === ExecState.Complete)
-      log(`Done ${(numComplete += 1)} / ${numTotal}`);
+      log(`done ${(numComplete += 1)} / ${numTotal}`);
   };
-
-  log("Start running commands...");
 
   try {
     await command.run(report);
