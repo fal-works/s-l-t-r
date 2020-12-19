@@ -34,11 +34,11 @@
   "repository": "https://github.com/fal-works/s-l-t-r",
   "scripts": {
     "build": "yarn clean && tsc && yarn format",
-    "clean": "rimraf lib & rimraf types",
+    "clean": "rimraf lib/* & rimraf types/*",
     "format": "yarn format:lib & yarn format:types",
-    "format:lib": "eslint --fix ./lib/**/*.js",
-    "format:types": "eslint --fix ./types/**/*.d.ts",
-    "test": "node ./test/test.js"
+    "format:lib": "eslint --fix lib/**/*.js",
+    "format:types": "eslint --fix types/**/*.d.ts",
+    "test": "node test/test.js"
   },
   "types": "types/index.d.ts"
 }
