@@ -1,7 +1,16 @@
 import { error, log, newLine } from "../log";
 import { Command } from "./command";
-import { ExecState, Reporter, ExecStateMap } from "./types";
+import { ExecState, Reporter, ExecStateMap, CommandType } from "./types";
 import { renderExecStateTree } from "./state-map";
+import { depthFirstSearch } from "./utility";
+
+const countUnitCommands = (rootCommand: Command): number => {
+  let numCommands = 0;
+  depthFirstSearch(rootCommand, (command) => {
+    if (command.type === CommandType.Unit) numCommands += 1;
+  });
+  return numCommands;
+};
 
 /**
  * Runs `command` as the root in a `try-catch` block.
@@ -11,24 +20,28 @@ export const root = async (
   renderResultSummary = true,
   onProgress?: (command: Command, state: ExecState) => void,
   onSuccessAll?: () => void,
-  onFailure?: () => void
+  onFailureAny?: () => void
 ): Promise<ExecStateMap> => {
+  const numTotal = countUnitCommands(command);
+  let numComplete = 0;
+
   const stateMap: ExecStateMap = new Map<Command, ExecState>();
   const onReport: Reporter = onProgress || (() => {});
   const report: Reporter = (command, state) => {
     onReport(command, state);
     stateMap.set(command, state);
+    if (command.type === CommandType.Unit && state === ExecState.Complete)
+      log(`Done ${(numComplete += 1)} / ${numTotal}`);
   };
 
   log("Start running commands...");
 
   try {
     await command.run(report);
-    log("Successfully completed.");
     if (onSuccessAll) onSuccessAll();
   } catch (e) {
     error(e);
-    if (onFailure) onFailure();
+    if (onFailureAny) onFailureAny();
   }
 
   if (renderResultSummary) {
