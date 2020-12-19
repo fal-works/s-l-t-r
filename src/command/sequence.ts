@@ -17,7 +17,7 @@ const runSeq = function (this: SequenceCommand, report: Reporter) {
     () => report(this, ExecState.Complete),
     (reason) => {
       report(this, ExecState.Failed);
-      Promise.reject(reason);
+      return Promise.reject(reason);
     }
   );
 };
