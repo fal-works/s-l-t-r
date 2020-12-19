@@ -5,38 +5,8 @@ import {
   EventRecord,
   ResultSummaryType,
 } from "./types";
+import { Recorder } from "./record";
 import { depthFirstSearch } from "./utility";
-
-/**
- * Gets event history of `command` registered in `historyMap.
- * If absent, creates new one and returns it.
- */
-const getHistory = (command: Command, recorder: Recorder): EventRecord[] => {
-  const { historyMap } = recorder;
-  const history = historyMap.get(command);
-  if (history) return history;
-  const newHistory: EventRecord[] = [];
-  historyMap.set(command, newHistory);
-  return newHistory;
-};
-
-/** `record()` method of `Recorder`. */
-const record = function (this: Recorder, command: Command, event: Event): void {
-  const timestamp = new Date().getTime();
-  getHistory(command, this).push({ event, timestamp });
-};
-
-/** Object for recording multiple `EventRecord`s. */
-interface Recorder {
-  historyMap: Map<Command, EventRecord[]>;
-  record: (command: Command, event: Event) => void;
-}
-
-/** Creates a new `Recorder` object. */
-export const createRecorder = (): Recorder => ({
-  historyMap: new Map<Command, EventRecord[]>(),
-  record,
-});
 
 const getResultType = (history: EventRecord[]): string => {
   const last = history[history.length - 1];
@@ -68,7 +38,7 @@ const durationFractionDigits = 2;
 const resultWidth = resultTypeWidth + durationWidth + 2;
 
 const renderUnitResult = (command: Command, recorder: Recorder): void => {
-  const history = getHistory(command, recorder);
+  const history = recorder.getHistory(command);
   const resultType = getResultType(history);
   const duration = calcDurationSec(history);
 
@@ -96,13 +66,8 @@ const renderCommandResult = (command: Command, recorder: Recorder): void => {
   }
 };
 
-/**
- * Outputs result summary in a list form.
- */
-export const renderResultList = (
-  topCommand: Command,
-  recorder: Recorder
-): void => {
+/** Outputs result summary in a list form. */
+const renderResultList = (topCommand: Command, recorder: Recorder): void => {
   const { stdout } = process;
 
   depthFirstSearch(topCommand, (command) => {
@@ -119,13 +84,8 @@ export const renderResultList = (
   });
 };
 
-/**
- * Outputs result summary in a tree form.
- */
-export const renderResultTree = (
-  topCommand: Command,
-  recorder: Recorder
-): void => {
+/** Outputs result summary in a tree form. */
+const renderResultTree = (topCommand: Command, recorder: Recorder): void => {
   const { stdout } = process;
 
   depthFirstSearch(topCommand, (command, depth) => {
@@ -138,6 +98,7 @@ export const renderResultTree = (
   });
 };
 
+/** Writes result summary into standard output. */
 export const renderResultSummary = (
   topCommand: Command,
   recorder: Recorder,

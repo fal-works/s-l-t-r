@@ -7,7 +7,8 @@ import {
   EventRecord,
   ResultSummaryType,
 } from "./types";
-import { createRecorder, renderResultSummary } from "./result";
+import { createRecorder } from "./record";
+import { renderResultSummary } from "./result";
 import { countUnitCommands } from "./utility";
 
 /**
