@@ -1,15 +1,7 @@
 import { error, log, newLine } from "../log";
 import { Command, Event, EventHandler, CommandType } from "./types";
 import { renderResultTree } from "./result";
-import { depthFirstSearch } from "./utility";
-
-const countUnitCommands = (rootCommand: Command): number => {
-  let numCommands = 0;
-  depthFirstSearch(rootCommand, (command) => {
-    if (command.type === CommandType.Unit) numCommands += 1;
-  });
-  return numCommands;
-};
+import { countUnitCommands } from "./utility";
 
 /**
  * Runs `command` as the root in a `try-catch` block.

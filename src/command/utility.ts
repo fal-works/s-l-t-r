@@ -1,5 +1,5 @@
 import { warn } from "../log";
-import { Command } from "./types";
+import { Command, CommandType } from "./types";
 import { cmd } from "./line";
 
 /** Normalizes the type of `command`. */
@@ -43,4 +43,13 @@ export const depthFirstSearch = (
   const childDepth = currentDepth + 1;
   for (const child of command.children)
     depthFirstSearch(child, callback, childDepth);
+};
+
+/** Count all descendant unit commands beginning from `topCommand`. */
+export const countUnitCommands = (topCommand: Command): number => {
+  let numCommands = 0;
+  depthFirstSearch(topCommand, (command) => {
+    if (command.type === CommandType.Unit) numCommands += 1;
+  });
+  return numCommands;
 };
