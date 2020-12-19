@@ -23,3 +23,9 @@ export interface Command {
   readonly type: CommandType;
   readonly children?: Command[];
 }
+
+/** Data unit for recording fired events. */
+export interface EventRecord {
+  event: Event;
+  timestamp: number;
+}

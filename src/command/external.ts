@@ -13,6 +13,8 @@ const runUnitExternal = function (
 ): Promise<void> {
   const { runner, name } = this;
   traceRun(name);
+
+  onEvent(this, Event.Start);
   return runner().then(
     () => {
       traceDone(name);

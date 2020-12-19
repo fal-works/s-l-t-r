@@ -14,6 +14,8 @@ const runUnit = function (
 ): Promise<void> {
   const { line, name } = this;
   traceRun(name);
+
+  onEvent(this, Event.Start);
   return commandLine.execLineWithoutLog(line).then(
     () => {
       traceDone(name);

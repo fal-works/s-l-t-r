@@ -12,10 +12,13 @@ const runSeq = function (
   this: SequenceCommand,
   onEvent: EventHandler
 ): Promise<void> {
-  let current = Promise.resolve();
+  let promiseChain = Promise.resolve();
+
+  onEvent(this, Event.Start);
   for (const child of this.children)
-    current = current.then(child.run.bind(child, onEvent));
-  return current.then(
+    promiseChain = promiseChain.then(child.run.bind(child, onEvent));
+
+  return promiseChain.then(
     () => onEvent(this, Event.Success),
     (reason) => {
       onEvent(this, Event.Failure);

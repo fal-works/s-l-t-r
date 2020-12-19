@@ -1,6 +1,12 @@
 import { error, log, newLine } from "../log";
-import { Command, Event, EventHandler, CommandType } from "./types";
-import { renderResultTree } from "./result";
+import {
+  Command,
+  Event,
+  EventHandler,
+  CommandType,
+  EventRecord,
+} from "./types";
+import { createRecorder, renderResultTree } from "./result";
 import { countUnitCommands } from "./utility";
 
 /**
@@ -12,13 +18,14 @@ export const run = async (
   onEvent?: (command: Command, event: Event) => void,
   onSuccessAll?: () => void,
   onFailureAny?: () => void
-): Promise<Map<Command, Event>> => {
+): Promise<Map<Command, EventRecord[]>> => {
   const numTotal = countUnitCommands(command);
   let numComplete = 0;
 
-  const stateMap = new Map<Command, Event>();
+  const recorder = createRecorder();
+
   const recordEvent: EventHandler = (command, event): void => {
-    stateMap.set(command, event);
+    recorder.record(command, event);
     if (command.type === CommandType.Unit && event === Event.Success)
       log(`done ${(numComplete += 1)} / ${numTotal}`);
   };
@@ -40,9 +47,9 @@ export const run = async (
 
   if (renderResultSummary) {
     newLine();
-    renderResultTree(command, stateMap);
+    renderResultTree(command, recorder);
     newLine();
   }
 
-  return stateMap;
+  return recorder.historyMap;
 };

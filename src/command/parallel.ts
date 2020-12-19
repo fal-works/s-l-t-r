@@ -25,6 +25,7 @@ const runPar = async function (
   this: ParallelCommand,
   onEvent: EventHandler
 ): Promise<void> {
+  onEvent(this, Event.Start);
   const promises = this.children.map(runCommandInPar(onEvent));
   const errors = await Promise.all(promises);
   for (const err of errors) {
