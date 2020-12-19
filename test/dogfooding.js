@@ -15,10 +15,16 @@ const { cmd, seq, par } = sltr;
 const rimraf = (files) => cmd("rimraf", files);
 const lint = (files) => cmd("eslint", "--fix", files);
 
+/** clean-up files in parallel */
 const clean = par(rimraf("lib/*"), rimraf("types/*")).rename("clean");
+
+/** emit files into lib/types */
 const emit = cmd("tsc");
+
+/** format files in parallel */
 const format = par(lint("lib/**/*.js"), lint("types/**/*.ts")).rename("format");
 
+/** do all of the above in sequence */
 const build = seq(clean, emit, format).rename("build");
 
 // ---- Run ---------------------------------------------------------------
