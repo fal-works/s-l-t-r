@@ -1,5 +1,11 @@
 import { ResultSummaryType, config } from "../../config";
-import { Command, CommandType, Event, EventRecord } from "../types";
+import {
+  Command,
+  CommandSubType,
+  CommandType,
+  Event,
+  EventRecord,
+} from "../types";
 import { depthFirstSearch } from "../tools";
 import { Recorder } from "./record";
 import { warn } from "../../log";
@@ -80,6 +86,32 @@ const renderResultList = (topCommand: Command, recorder: Recorder): void => {
   });
 };
 
+const getDisplayName = (command: Command): string => {
+  let prefix: string;
+
+  switch (command.type) {
+    case CommandType.Unit:
+      prefix = "";
+      break;
+
+    case CommandType.Group:
+      switch (command.subType) {
+        case CommandSubType.Sequence:
+          prefix = "[seq] ";
+          break;
+        case CommandSubType.Parallel:
+          prefix = "[par] ";
+          break;
+        default:
+          prefix = "[?] ";
+          warn(`Command type mismatch: (${command.type}, ${command.subType}`);
+          break;
+      }
+  }
+
+  return prefix + command.name;
+};
+
 /** Outputs result summary in a tree form. */
 const renderResultTree = (topCommand: Command, recorder: Recorder): void => {
   const { stdout } = process;
@@ -89,7 +121,7 @@ const renderResultTree = (topCommand: Command, recorder: Recorder): void => {
 
     stdout.write("| ");
     stdout.write("  ".repeat(depth));
-    stdout.write(command.name);
+    stdout.write(getDisplayName(command));
     stdout.write("\n");
   });
 };

@@ -1,5 +1,12 @@
 import { traceDone, traceRun } from "../../debug";
-import { Command, CommandType, Event, EventHandler } from "../types";
+import {
+  Command,
+  CommandType,
+  CommandSubType,
+  Event,
+  EventHandler,
+} from "../types";
+import { createCommand } from "./command";
 
 /** `Command` that runs an external asynchronous function. */
 interface ExternalCommand extends Command {
@@ -35,9 +42,12 @@ const runUnitExternal = function (
 export const cmdEx = (
   promiserFunc: () => Promise<void>,
   name = "(external)"
-): ExternalCommand => ({
-  run: runUnitExternal,
-  type: CommandType.Unit,
-  runner: promiserFunc,
-  name,
-});
+): ExternalCommand => {
+  const base = createCommand({
+    run: runUnitExternal,
+    type: CommandType.Unit,
+    subType: CommandSubType.External,
+    name,
+  });
+  return Object.assign(base, { runner: promiserFunc });
+};

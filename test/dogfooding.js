@@ -3,13 +3,13 @@ const { run, cmd, seq, par } = sltr;
 
 // sltr.config.resultSummaryType = "list";
 
-const clean = (files) => cmd("rimraf", files);
-const format = (files) => cmd("eslint", "--fix", files);
+const rimraf = (files) => cmd("rimraf", files);
+const lint = (files) => cmd("eslint", "--fix", files);
 
-const build = seq(
-  par(clean("lib/*"), clean("types/*")),
-  cmd("tsc"),
-  par(format("lib/**/*.js"), format("types/**/*.ts"))
-);
+const clean = par(rimraf("lib/*"), rimraf("types/*")).rename("clean");
+const emit = cmd("tsc");
+const format = par(lint("lib/**/*.js"), lint("types/**/*.ts")).rename("format");
+
+const build = seq(clean, emit, format).rename("build");
 
 run(build);

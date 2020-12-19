@@ -1,6 +1,13 @@
 import { logDebug, debug, debugLines } from "../../debug";
 import { error } from "../../log";
-import { Command, CommandType, Event, EventHandler } from "../types";
+import {
+  Command,
+  CommandType,
+  CommandSubType,
+  Event,
+  EventHandler,
+} from "../types";
+import { createCommand } from "./command";
 import { normalizeCommands, getCommandNames } from "./group-utility";
 
 /** Converts `command` to a `Promise` to be passed to `Promise.all()`. */
@@ -17,7 +24,6 @@ const runCommandInPar = (onEvent: EventHandler) => (command: Command) =>
 
 interface ParallelCommand extends Command {
   children: Command[];
-  name: string;
 }
 
 /** `run()` method for `ParallelCommand`. */
@@ -48,10 +54,12 @@ const inspectCommands = (commands: Command[]): void => {
 export const par = (...commands: (Command | string)[]): ParallelCommand => {
   const children = normalizeCommands(commands);
   inspectCommands(children);
-  return {
+
+  const base = createCommand({
     run: runPar,
     type: CommandType.Group,
-    children,
-    name: "[par]",
-  };
+    subType: CommandSubType.Parallel,
+    name: "",
+  });
+  return Object.assign(base, { children });
 };

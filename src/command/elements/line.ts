@@ -1,6 +1,13 @@
 import * as commandLine from "../../command-line";
 import { traceDone, traceRun } from "../../debug";
-import { Command, CommandType, Event, EventHandler } from "../types";
+import {
+  Command,
+  CommandType,
+  CommandSubType,
+  Event,
+  EventHandler,
+} from "../types";
+import { createCommand } from "./command";
 
 /** `Command` that runs a single command line. */
 interface LineCommand extends Command {
@@ -31,12 +38,14 @@ const runUnit = function (
 /** Creates a `Command` unit. */
 export const cmd = (command: string, ...args: string[]): LineCommand => {
   const line = commandLine.create(command, args);
-  return {
+
+  const base = createCommand({
     name: line,
     run: runUnit,
     type: CommandType.Unit,
-    line,
-  };
+    subType: CommandSubType.CommandLine,
+  });
+  return Object.assign(base, { line });
 };
 
 /** Creates an `echo` command (does not be run immediately). */

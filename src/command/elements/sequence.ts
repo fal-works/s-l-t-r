@@ -1,5 +1,12 @@
 import { logDebug, debug, debugLines } from "../../debug";
-import { Command, CommandType, Event, EventHandler } from "../types";
+import {
+  Command,
+  CommandType,
+  CommandSubType,
+  Event,
+  EventHandler,
+} from "../types";
+import { createCommand } from "./command";
 import { normalizeCommands, getCommandNames } from "./group-utility";
 
 interface SequenceCommand extends Command {
@@ -39,10 +46,12 @@ const inspectCommands = (commands: Command[]): void => {
 export const seq = (...commands: (Command | string)[]): SequenceCommand => {
   const children = normalizeCommands(commands);
   inspectCommands(children);
-  return {
+
+  const base = createCommand({
     run: runSeq,
     type: CommandType.Group,
-    children,
-    name: "[seq]",
-  };
+    subType: CommandSubType.Sequence,
+    name: "",
+  });
+  return Object.assign(base, { children });
 };

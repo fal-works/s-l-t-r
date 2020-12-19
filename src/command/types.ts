@@ -5,6 +5,16 @@ export const CommandType = {
 } as const;
 export type CommandType = typeof CommandType[keyof typeof CommandType];
 
+/** Value that specifies the sub-type of a `Command` object. */
+export const CommandSubType = {
+  CommandLine: "commandline",
+  External: "external",
+  Null: "null",
+  Sequence: "sequence",
+  Parallel: "parallel",
+} as const;
+export type CommandSubType = typeof CommandSubType[keyof typeof CommandSubType];
+
 /** Event fired by `Command` objects. */
 export const Event = {
   Start: "start",
@@ -18,10 +28,12 @@ export type EventHandler = (command: Command, event: Event) => void;
 
 /** Command object. Can be wrapped with `seq()` or `par()`. */
 export interface Command {
-  readonly name: string;
   readonly run: (onEvent: EventHandler) => Promise<void>;
   readonly type: CommandType;
+  readonly subType: CommandSubType;
   readonly children?: Command[];
+  readonly rename: (name: string) => Command;
+  name: string;
 }
 
 /** Data unit for recording fired events. */
