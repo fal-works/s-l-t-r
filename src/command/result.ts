@@ -10,7 +10,7 @@ const getResultString = (
       return "-";
     case Event.Start:
       return "nc"; // Not completed. Shouldn't happen
-    case Event.Complete:
+    case Event.Success:
       return "ok";
     case Event.Failure:
       return "err";

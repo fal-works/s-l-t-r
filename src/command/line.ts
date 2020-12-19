@@ -17,7 +17,7 @@ const runUnit = function (
   return commandLine.execLineWithoutLog(line).then(
     () => {
       traceDone(name);
-      onEvent(this, Event.Complete);
+      onEvent(this, Event.Success);
     },
     (reason) => {
       onEvent(this, Event.Failure);

@@ -16,7 +16,7 @@ const runSeq = function (
   for (const child of this.children)
     current = current.then(child.run.bind(child, onEvent));
   return current.then(
-    () => onEvent(this, Event.Complete),
+    () => onEvent(this, Event.Success),
     (reason) => {
       onEvent(this, Event.Failure);
       return Promise.reject(reason);

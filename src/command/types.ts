@@ -8,7 +8,7 @@ export type CommandType = typeof CommandType[keyof typeof CommandType];
 /** Event fired by `Command` objects. */
 export const Event = {
   Start: "start",
-  Complete: "complete",
+  Success: "success",
   Failure: "failure",
 } as const;
 export type Event = typeof Event[keyof typeof Event];

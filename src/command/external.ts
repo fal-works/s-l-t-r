@@ -16,7 +16,7 @@ const runUnitExternal = function (
   return runner().then(
     () => {
       traceDone(name);
-      onEvent(this, Event.Complete);
+      onEvent(this, Event.Success);
     },
     (reason) => {
       onEvent(this, Event.Failure);

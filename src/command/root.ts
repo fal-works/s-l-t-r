@@ -19,7 +19,7 @@ export const root = async (
   const stateMap = new Map<Command, Event>();
   const recordEvent: EventHandler = (command, event): void => {
     stateMap.set(command, event);
-    if (command.type === CommandType.Unit && event === Event.Complete)
+    if (command.type === CommandType.Unit && event === Event.Success)
       log(`done ${(numComplete += 1)} / ${numTotal}`);
   };
 

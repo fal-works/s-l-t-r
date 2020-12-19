@@ -33,7 +33,7 @@ const runPar = async function (
       return Promise.reject("Found error in parallel commands.");
     }
   }
-  onEvent(this, Event.Complete);
+  onEvent(this, Event.Success);
 };
 
 /** Emits debug log. */

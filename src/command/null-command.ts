@@ -8,7 +8,7 @@ import { traceRunDone } from "../debug";
  */
 const runNull = function (this: Command, onEvent: EventHandler) {
   traceRunDone(this.name);
-  onEvent(this, Event.Complete);
+  onEvent(this, Event.Success);
   return Promise.resolve();
 };
 
