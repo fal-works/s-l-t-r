@@ -1,7 +1,16 @@
-const sltr = require("../lib");
-const { run, cmd, seq, par } = sltr;
+if (!require("fs").existsSync("lib/index.js")) {
+  console.error("[!] Library files not found. First build with npm scripts.");
+  process.exit(1);
+}
+
+// ---- Import ------------------------------------------------------------
+
+const sltr = require("../lib"); // lib files should be already created
+const { cmd, seq, par } = sltr;
 
 // sltr.config.resultSummaryType = "list";
+
+// ---- Construct Commands ------------------------------------------------
 
 const rimraf = (files) => cmd("rimraf", files);
 const lint = (files) => cmd("eslint", "--fix", files);
@@ -12,4 +21,11 @@ const format = par(lint("lib/**/*.js"), lint("types/**/*.ts")).rename("format");
 
 const build = seq(clean, emit, format).rename("build");
 
-run(build);
+// ---- Run ---------------------------------------------------------------
+
+// sltr.run(build);
+
+const router = sltr.tools.createRouter({ clean, build, format }, build);
+
+const CLI_ARGUMENT = process.argv[2];
+router.run(CLI_ARGUMENT);

@@ -18,3 +18,8 @@ export const log = (s: any): void => {
 export const newLine = (): void => {
   process.stdout.write("\n");
 };
+
+export const println = (s: string): void => {
+  process.stdout.write(s);
+  process.stdout.write("\n");
+};

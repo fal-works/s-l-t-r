@@ -41,3 +41,17 @@ export interface EventRecord {
   event: Event;
   timestamp: number;
 }
+
+/** Return value from `run()`. */
+export type Result = Map<Command, EventRecord[]>;
+
+/** Object that runs different commands depending on the given key. */
+export interface Router {
+  readonly run: (
+    key: string,
+    onEvent?: (command: Command, event: Event) => any,
+    onSuccessAll?: () => any,
+    onFailureAny?: () => any
+  ) => Promise<Result>;
+  readonly help: () => void;
+}

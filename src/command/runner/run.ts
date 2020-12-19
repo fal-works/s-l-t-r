@@ -1,25 +1,19 @@
 import { error, log, newLine } from "../../log";
 import { config } from "../../config";
-import {
-  Command,
-  Event,
-  EventHandler,
-  CommandType,
-  EventRecord,
-} from "../types";
+import { Command, Event, EventHandler, CommandType, Result } from "../types";
 import { countUnitCommands } from "../tools/traverse";
 import { createRecorder } from "./record";
-import { renderResultSummary } from "./result";
+import { renderResultSummary } from "./result-summary";
 
 /**
  * Runs any `command` in a `try-catch` block.
  */
 export const run = async (
   command: Command,
-  onEvent?: (command: Command, event: Event) => void,
-  onSuccessAll?: () => void,
-  onFailureAny?: () => void
-): Promise<Map<Command, EventRecord[]>> => {
+  onEvent?: (command: Command, event: Event) => any,
+  onSuccessAll?: () => any,
+  onFailureAny?: () => any
+): Promise<Result> => {
   const numTotal = countUnitCommands(command);
   let numComplete = 0;
 
