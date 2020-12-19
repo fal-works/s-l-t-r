@@ -1,5 +1,9 @@
-import { CommandType, CommandEvent, CommandEventHandler } from "./types";
-import { Command } from "./command";
+import {
+  Command,
+  CommandType,
+  CommandEvent,
+  CommandEventHandler,
+} from "./types";
 import { traceDone, traceRun } from "../debug";
 
 /** `Command` that runs an external asynchronous function. */

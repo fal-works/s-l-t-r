@@ -1,6 +1,10 @@
 import * as commandLine from "../command-line";
-import { CommandType, CommandEvent, CommandEventHandler } from "./types";
-import { Command } from "./command";
+import {
+  Command,
+  CommandType,
+  CommandEvent,
+  CommandEventHandler,
+} from "./types";
 import { traceDone, traceRun } from "../debug";
 
 /** `Command` that runs a single command line. */

@@ -1,7 +1,11 @@
 import { logDebug, debug, debugLines } from "../debug";
 import { error } from "../log";
-import { CommandType, CommandEvent, CommandEventHandler } from "./types";
-import { Command } from "./command";
+import {
+  Command,
+  CommandType,
+  CommandEvent,
+  CommandEventHandler,
+} from "./types";
 import { normalizeCommands, getCommandNames } from "./utility";
 
 /** Converts `command` to a `Promise` to be passed to `Promise.all()`. */

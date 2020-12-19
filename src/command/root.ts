@@ -1,6 +1,10 @@
 import { error, log, newLine } from "../log";
-import { Command } from "./command";
-import { CommandEvent, CommandEventHandler, CommandType } from "./types";
+import {
+  Command,
+  CommandEvent,
+  CommandEventHandler,
+  CommandType,
+} from "./types";
 import { renderResultTree } from "./result";
 import { depthFirstSearch } from "./utility";
 

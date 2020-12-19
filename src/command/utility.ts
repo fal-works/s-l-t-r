@@ -1,5 +1,5 @@
 import { warn } from "../log";
-import { Command } from "./command";
+import { Command } from "./types";
 import { cmd } from "./line";
 
 /** Normalizes the type of `command`. */

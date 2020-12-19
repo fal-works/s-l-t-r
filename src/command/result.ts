@@ -1,5 +1,4 @@
-import { Command } from "./command";
-import { CommandType, CommandEvent } from "./types";
+import { Command, CommandType, CommandEvent } from "./types";
 import { depthFirstSearch } from "./utility";
 
 const getResultString = (

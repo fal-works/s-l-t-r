@@ -1,6 +1,10 @@
 import { logDebug, debug, debugLines } from "../debug";
-import { Command } from "./command";
-import { CommandType, CommandEvent, CommandEventHandler } from "./types";
+import {
+  Command,
+  CommandType,
+  CommandEvent,
+  CommandEventHandler,
+} from "./types";
 import { normalizeCommands, getCommandNames } from "./utility";
 
 interface SequenceCommand extends Command {

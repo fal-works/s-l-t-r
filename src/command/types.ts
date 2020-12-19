@@ -1,5 +1,3 @@
-import { Command } from "./command";
-
 /** Value that specifies the type of a `Command` object. */
 export const CommandType = {
   Unit: "unit",
@@ -20,3 +18,11 @@ export type CommandEventHandler = (
   command: Command,
   event: CommandEvent
 ) => void;
+
+/** Command object. Can be wrapped with `seq()` or `par()`. */
+export interface Command {
+  readonly name: string;
+  readonly run: (onEvent: CommandEventHandler) => Promise<void>;
+  readonly type: CommandType;
+  readonly children?: Command[];
+}
