@@ -1,7 +1,7 @@
-import { logDebug, debug, debugLines } from "../debug";
-import { error } from "../log";
-import { Command, CommandType, Event, EventHandler } from "./types";
-import { normalizeCommands, getCommandNames } from "./utility";
+import { logDebug, debug, debugLines } from "../../debug";
+import { error } from "../../log";
+import { Command, CommandType, Event, EventHandler } from "../types";
+import { normalizeCommands, getCommandNames } from "./group-utility";
 
 /** Converts `command` to a `Promise` to be passed to `Promise.all()`. */
 const runCommandInPar = (onEvent: EventHandler) => (command: Command) =>

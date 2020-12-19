@@ -6,7 +6,7 @@ import {
   ResultSummaryType,
 } from "./types";
 import { Recorder } from "./record";
-import { depthFirstSearch } from "./utility";
+import { depthFirstSearch } from "./traverse";
 
 const getResultType = (history: EventRecord[]): string => {
   const last = history[history.length - 1];

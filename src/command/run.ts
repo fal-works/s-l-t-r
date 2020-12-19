@@ -9,7 +9,7 @@ import {
 } from "./types";
 import { createRecorder } from "./record";
 import { renderResultSummary } from "./result";
-import { countUnitCommands } from "./utility";
+import { countUnitCommands } from "./traverse";
 
 /**
  * Runs any `command` in a `try-catch` block.

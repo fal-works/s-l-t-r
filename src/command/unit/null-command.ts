@@ -1,6 +1,6 @@
-import * as commandLine from "../command-line";
-import { Command, CommandType, Event, EventHandler } from "./types";
-import { traceRunDone } from "../debug";
+import * as commandLine from "../../command-line";
+import { traceRunDone } from "../../debug";
+import { Command, CommandType, Event, EventHandler } from "../types";
 
 /**
  * `run()` method for `nullCmd()`.

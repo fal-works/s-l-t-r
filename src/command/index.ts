@@ -1,10 +1,12 @@
 export * as types from "./types";
 
-export { cmd, echo } from "./line";
-export { cmdEx } from "./external";
-export { seq } from "./sequence";
-export { par } from "./parallel";
-export { nullCmd } from "./null-command";
+export { cmd, echo } from "./unit/line";
+export { cmdEx } from "./unit/external";
+export { nullCmd } from "./unit/null-command";
+
+export { seq } from "./group/sequence";
+export { par } from "./group/parallel";
+
 export { run } from "./run";
 
-export { depthFirstSearch } from "./utility";
+export { depthFirstSearch } from "./traverse";

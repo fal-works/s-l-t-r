@@ -1,6 +1,6 @@
-import * as commandLine from "../command-line";
-import { Command, CommandType, Event, EventHandler } from "./types";
-import { traceDone, traceRun } from "../debug";
+import * as commandLine from "../../command-line";
+import { traceDone, traceRun } from "../../debug";
+import { Command, CommandType, Event, EventHandler } from "../types";
 
 /** `Command` that runs a single command line. */
 interface LineCommand extends Command {

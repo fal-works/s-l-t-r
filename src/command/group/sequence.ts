@@ -1,6 +1,6 @@
-import { logDebug, debug, debugLines } from "../debug";
-import { Command, CommandType, Event, EventHandler } from "./types";
-import { normalizeCommands, getCommandNames } from "./utility";
+import { logDebug, debug, debugLines } from "../../debug";
+import { Command, CommandType, Event, EventHandler } from "../types";
+import { normalizeCommands, getCommandNames } from "./group-utility";
 
 interface SequenceCommand extends Command {
   children: Command[];
