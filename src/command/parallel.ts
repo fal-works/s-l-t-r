@@ -1,4 +1,3 @@
-import { error } from "../log-and-error";
 import { logDebug, debug, debugLines } from "../debug";
 import { CommandType, ExecState, Reporter } from "./types";
 import { Command } from "./command";
@@ -10,7 +9,7 @@ const runCommandInPar = (report: Reporter) => (command: Command) =>
     command.run(report).then(
       () => resolve(false),
       (e) => {
-        error(e);
+        console.error(e);
         resolve(true);
       }
     )

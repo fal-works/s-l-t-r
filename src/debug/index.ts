@@ -13,9 +13,7 @@ export const debug = (s: string): void => {
 
 /** Emits debug log of multiple lines. */
 export const debugLines = (lines: string[], linePrefix = ""): void => {
-  if (logDebug) {
-    lines.forEach((s) =>
-      process.stdout.write(`[s-l-t-r] [debug] ${linePrefix + s}\n`)
-    );
-  }
+  if (!logDebug) return;
+  for (const line of lines)
+    process.stdout.write(`[s-l-t-r] [debug] ${linePrefix + line}\n`);
 };

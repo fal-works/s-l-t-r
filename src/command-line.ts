@@ -33,7 +33,7 @@ export const exec = async (
   const line = create(command, args);
   debug("run: " + line);
   await execLineWithoutLog(line);
-  debug("Done: " + line);
+  debug("done: " + line);
 };
 
 /**

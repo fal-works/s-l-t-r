@@ -1,4 +1,3 @@
-import { info } from "../log-and-error";
 import { CommandType, ExecState, Reporter } from "./types";
 import { Command } from "./command";
 import { debug } from "../debug";
@@ -17,7 +16,7 @@ const runUnitExternal = function (
   debug("run: " + name);
   return runner().then(
     () => {
-      info("Done:" + name);
+      debug("done:" + name);
       report(this, ExecState.Complete);
     },
     (reason) => {

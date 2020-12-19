@@ -1,4 +1,3 @@
-import { info, error } from "../log-and-error";
 import { Command } from "./command";
 import { ExecState, Reporter, ExecStateMap } from "./types";
 import { renderExecStateTree } from "./state-map";
@@ -22,17 +21,17 @@ export const root = async (
 
   try {
     await command.run(report);
-    info("Successfully completed.");
+    console.log("[s-l-t-r] Successfully completed.");
     if (onSuccessAll) onSuccessAll();
   } catch (e) {
-    error(e);
+    console.error(e);
     if (onFailure) onFailure();
   }
 
   if (renderResultSummary) {
-    process.stdout.write("[s-l-t-r] Result:\n\n");
+    console.log("");
     renderExecStateTree(command, stateMap);
-    process.stdout.write("\n");
+    console.log("");
   }
 
   return stateMap;

@@ -1,4 +1,3 @@
-import { info } from "../log-and-error";
 import * as commandLine from "../command-line";
 import { CommandType, ExecState, Reporter } from "./types";
 import { Command } from "./command";
@@ -15,7 +14,7 @@ const runUnit = function (this: LineCommand, report: Reporter): Promise<void> {
   debug("run: " + name);
   return commandLine.execLineWithoutLog(line).then(
     () => {
-      info("Done:" + name);
+      debug("done:" + name);
       report(this, ExecState.Complete);
     },
     (reason) => {

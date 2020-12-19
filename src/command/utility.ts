@@ -1,4 +1,3 @@
-import { warn } from "../log-and-error";
 import { Command } from "./command";
 import { cmd } from "./line";
 
@@ -12,7 +11,7 @@ export const normalizeCommand = (command: Command | string): Command | null => {
       break;
   }
 
-  warn(`Not a command: ${command}`);
+  console.warn(`Not a command: ${command}`);
   return null;
 };
 
