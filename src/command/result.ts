@@ -1,18 +1,18 @@
-import { Command, CommandType, CommandEvent } from "./types";
+import { Command, CommandType, Event } from "./types";
 import { depthFirstSearch } from "./utility";
 
 const getResultString = (
   command: Command,
-  map: Map<Command, CommandEvent>
+  map: Map<Command, Event>
 ): string => {
   switch (map.get(command)) {
     case undefined:
       return "-";
-    case CommandEvent.Start:
+    case Event.Start:
       return "nc"; // Not completed. Shouldn't happen
-    case CommandEvent.Complete:
+    case Event.Complete:
       return "ok";
-    case CommandEvent.Failure:
+    case Event.Failure:
       return "err";
   }
 };
@@ -23,7 +23,7 @@ const getResultString = (
  */
 export const renderResultTree = (
   topCommand: Command,
-  resultMap: Map<Command, CommandEvent>
+  resultMap: Map<Command, Event>
 ): void => {
   const { stdout } = process;
   depthFirstSearch(topCommand, (command, depth) => {

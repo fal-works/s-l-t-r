@@ -6,23 +6,20 @@ export const CommandType = {
 export type CommandType = typeof CommandType[keyof typeof CommandType];
 
 /** Event fired by `Command` objects. */
-export const CommandEvent = {
+export const Event = {
   Start: "start",
   Complete: "complete",
   Failure: "failure",
 } as const;
-export type CommandEvent = typeof CommandEvent[keyof typeof CommandEvent];
+export type Event = typeof Event[keyof typeof Event];
 
 /** Function for hadnling command events. */
-export type CommandEventHandler = (
-  command: Command,
-  event: CommandEvent
-) => void;
+export type EventHandler = (command: Command, event: Event) => void;
 
 /** Command object. Can be wrapped with `seq()` or `par()`. */
 export interface Command {
   readonly name: string;
-  readonly run: (onEvent: CommandEventHandler) => Promise<void>;
+  readonly run: (onEvent: EventHandler) => Promise<void>;
   readonly type: CommandType;
   readonly children?: Command[];
 }

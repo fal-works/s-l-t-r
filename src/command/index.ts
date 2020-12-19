@@ -1,4 +1,4 @@
-export { Command, CommandType } from "./types";
+export * as types from "./types";
 
 export { cmd, echo } from "./line";
 export { cmdEx } from "./external";

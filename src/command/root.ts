@@ -1,10 +1,5 @@
 import { error, log, newLine } from "../log";
-import {
-  Command,
-  CommandEvent,
-  CommandEventHandler,
-  CommandType,
-} from "./types";
+import { Command, Event, EventHandler, CommandType } from "./types";
 import { renderResultTree } from "./result";
 import { depthFirstSearch } from "./utility";
 
@@ -22,21 +17,21 @@ const countUnitCommands = (rootCommand: Command): number => {
 export const root = async (
   command: Command,
   renderResultSummary = true,
-  onEvent?: (command: Command, event: CommandEvent) => void,
+  onEvent?: (command: Command, event: Event) => void,
   onSuccessAll?: () => void,
   onFailureAny?: () => void
-): Promise<Map<Command, CommandEvent>> => {
+): Promise<Map<Command, Event>> => {
   const numTotal = countUnitCommands(command);
   let numComplete = 0;
 
-  const stateMap = new Map<Command, CommandEvent>();
-  const recordEvent: CommandEventHandler = (command, event): void => {
+  const stateMap = new Map<Command, Event>();
+  const recordEvent: EventHandler = (command, event): void => {
     stateMap.set(command, event);
-    if (command.type === CommandType.Unit && event === CommandEvent.Complete)
+    if (command.type === CommandType.Unit && event === Event.Complete)
       log(`done ${(numComplete += 1)} / ${numTotal}`);
   };
 
-  const eventHandler: CommandEventHandler = onEvent
+  const eventHandler: EventHandler = onEvent
     ? (command, event) => {
         recordEvent(command, event);
         onEvent(command, event);

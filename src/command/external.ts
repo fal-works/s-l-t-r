@@ -1,9 +1,4 @@
-import {
-  Command,
-  CommandType,
-  CommandEvent,
-  CommandEventHandler,
-} from "./types";
+import { Command, CommandType, Event, EventHandler } from "./types";
 import { traceDone, traceRun } from "../debug";
 
 /** `Command` that runs an external asynchronous function. */
@@ -14,17 +9,17 @@ interface ExternalCommand extends Command {
 /** `run()` method for `ExternalCommand`. */
 const runUnitExternal = function (
   this: ExternalCommand,
-  onEvent: CommandEventHandler
+  onEvent: EventHandler
 ): Promise<void> {
   const { runner, name } = this;
   traceRun(name);
   return runner().then(
     () => {
       traceDone(name);
-      onEvent(this, CommandEvent.Complete);
+      onEvent(this, Event.Complete);
     },
     (reason) => {
-      onEvent(this, CommandEvent.Failure);
+      onEvent(this, Event.Failure);
       return Promise.reject(reason);
     }
   );

@@ -1,10 +1,5 @@
 import { logDebug, debug, debugLines } from "../debug";
-import {
-  Command,
-  CommandType,
-  CommandEvent,
-  CommandEventHandler,
-} from "./types";
+import { Command, CommandType, Event, EventHandler } from "./types";
 import { normalizeCommands, getCommandNames } from "./utility";
 
 interface SequenceCommand extends Command {
@@ -15,15 +10,15 @@ interface SequenceCommand extends Command {
 /** `run()` method for `SequenceCommand`. */
 const runSeq = function (
   this: SequenceCommand,
-  onEvent: CommandEventHandler
+  onEvent: EventHandler
 ): Promise<void> {
   let current = Promise.resolve();
   for (const child of this.children)
     current = current.then(child.run.bind(child, onEvent));
   return current.then(
-    () => onEvent(this, CommandEvent.Complete),
+    () => onEvent(this, Event.Complete),
     (reason) => {
-      onEvent(this, CommandEvent.Failure);
+      onEvent(this, Event.Failure);
       return Promise.reject(reason);
     }
   );

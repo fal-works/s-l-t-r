@@ -1,15 +1,14 @@
-import { Command, CommandType } from "../command";
 import * as commandLine from "../command-line";
-import { CommandEvent, CommandEventHandler } from "../command/types";
+import { Command, CommandType, Event, EventHandler } from "./types";
 import { traceRunDone } from "../debug";
 
 /**
  * `run()` method for `nullCmd()`.
  * Emits debug log and does nothing else.
  */
-const runNull = function (this: Command, onEvent: CommandEventHandler) {
+const runNull = function (this: Command, onEvent: EventHandler) {
   traceRunDone(this.name);
-  onEvent(this, CommandEvent.Complete);
+  onEvent(this, Event.Complete);
   return Promise.resolve();
 };
 

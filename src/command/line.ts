@@ -1,10 +1,5 @@
 import * as commandLine from "../command-line";
-import {
-  Command,
-  CommandType,
-  CommandEvent,
-  CommandEventHandler,
-} from "./types";
+import { Command, CommandType, Event, EventHandler } from "./types";
 import { traceDone, traceRun } from "../debug";
 
 /** `Command` that runs a single command line. */
@@ -15,17 +10,17 @@ interface LineCommand extends Command {
 /** `run()` method for `LineCommand`. */
 const runUnit = function (
   this: LineCommand,
-  onEvent: CommandEventHandler
+  onEvent: EventHandler
 ): Promise<void> {
   const { line, name } = this;
   traceRun(name);
   return commandLine.execLineWithoutLog(line).then(
     () => {
       traceDone(name);
-      onEvent(this, CommandEvent.Complete);
+      onEvent(this, Event.Complete);
     },
     (reason) => {
-      onEvent(this, CommandEvent.Failure);
+      onEvent(this, Event.Failure);
       return Promise.reject(reason);
     }
   );
