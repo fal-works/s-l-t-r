@@ -1,7 +1,7 @@
 import * as util from "util";
 import * as child_process from "child_process";
 
-import { env } from "./config";
+import { env } from "./environment";
 import { debug } from "./debug";
 
 const promiseExec = util.promisify(child_process.exec);
