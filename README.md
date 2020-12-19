@@ -7,6 +7,8 @@ Something Like a Task Runner.
 - Create a router so you can run different commands according to the arguments.
 - Check the execution result summary and see where it took time or where it failed.
 
+GitHub: <https://github.com/fal-works/s-l-t-r>
+
 
 ## Install
 
