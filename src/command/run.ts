@@ -5,8 +5,9 @@ import {
   EventHandler,
   CommandType,
   EventRecord,
+  ResultSummaryType,
 } from "./types";
-import { createRecorder, renderResultTree } from "./result";
+import { createRecorder, renderResultSummary } from "./result";
 import { countUnitCommands } from "./utility";
 
 /**
@@ -14,7 +15,7 @@ import { countUnitCommands } from "./utility";
  */
 export const run = async (
   command: Command,
-  renderResultSummary = true,
+  resultSummaryType = ResultSummaryType.Tree,
   onEvent?: (command: Command, event: Event) => void,
   onSuccessAll?: () => void,
   onFailureAny?: () => void
@@ -45,9 +46,9 @@ export const run = async (
     if (onFailureAny) onFailureAny();
   }
 
-  if (renderResultSummary) {
+  if (resultSummaryType) {
     newLine();
-    renderResultTree(command, recorder);
+    renderResultSummary(command, recorder, resultSummaryType);
     newLine();
   }
 

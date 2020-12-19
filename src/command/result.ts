@@ -1,14 +1,18 @@
-import { Command, CommandType, Event, EventRecord } from "./types";
+import {
+  Command,
+  CommandType,
+  Event,
+  EventRecord,
+  ResultSummaryType,
+} from "./types";
 import { depthFirstSearch } from "./utility";
 
 /**
  * Gets event history of `command` registered in `historyMap.
  * If absent, creates new one and returns it.
  */
-const getHistory = (
-  historyMap: Recorder["historyMap"],
-  command: Command
-): EventRecord[] => {
+const getHistory = (command: Command, recorder: Recorder): EventRecord[] => {
+  const { historyMap } = recorder;
   const history = historyMap.get(command);
   if (history) return history;
   const newHistory: EventRecord[] = [];
@@ -18,8 +22,8 @@ const getHistory = (
 
 /** `record()` method of `Recorder`. */
 const record = function (this: Recorder, command: Command, event: Event): void {
-  const history = getHistory(this.historyMap, command);
-  history.push({ event, timestamp: new Date().getTime() });
+  const timestamp = new Date().getTime();
+  getHistory(command, this).push({ event, timestamp });
 };
 
 /** Object for recording multiple `EventRecord`s. */
@@ -63,7 +67,8 @@ const durationWidth = 5;
 const durationFractionDigits = 2;
 const resultWidth = resultTypeWidth + durationWidth + 2;
 
-const renderUnitResult = (history: EventRecord[]): void => {
+const renderUnitResult = (command: Command, recorder: Recorder): void => {
+  const history = getHistory(command, recorder);
   const resultType = getResultType(history);
   const duration = calcDurationSec(history);
 
@@ -84,7 +89,7 @@ const renderGroupResult = (): void => {
 const renderCommandResult = (command: Command, recorder: Recorder): void => {
   switch (command.type) {
     case CommandType.Unit:
-      renderUnitResult(getHistory(recorder.historyMap, command));
+      renderUnitResult(command, recorder);
       break;
     case CommandType.Group:
       renderGroupResult();
@@ -92,8 +97,30 @@ const renderCommandResult = (command: Command, recorder: Recorder): void => {
 };
 
 /**
- * Outputs execution state of all descendant commands
- * beginning from `topCommand`.
+ * Outputs result summary in a list form.
+ */
+export const renderResultList = (
+  topCommand: Command,
+  recorder: Recorder
+): void => {
+  const { stdout } = process;
+
+  depthFirstSearch(topCommand, (command) => {
+    switch (command.type) {
+      case CommandType.Unit:
+        renderUnitResult(command, recorder);
+        stdout.write("| ");
+        stdout.write(command.name);
+        stdout.write("\n");
+        break;
+      case CommandType.Group:
+        break;
+    }
+  });
+};
+
+/**
+ * Outputs result summary in a tree form.
  */
 export const renderResultTree = (
   topCommand: Command,
@@ -109,4 +136,19 @@ export const renderResultTree = (
     stdout.write(command.name);
     stdout.write("\n");
   });
+};
+
+export const renderResultSummary = (
+  topCommand: Command,
+  recorder: Recorder,
+  type: ResultSummaryType
+): void => {
+  switch (type) {
+    case ResultSummaryType.Tree:
+      renderResultTree(topCommand, recorder);
+      break;
+    case ResultSummaryType.List:
+      renderResultList(topCommand, recorder);
+      break;
+  }
 };
