@@ -39,7 +39,9 @@ export interface Command {
   readonly subType: CommandSubType;
   readonly children?: Command[];
   readonly rename: (name: string) => Command;
+  readonly ignoreFailure: (yes?: boolean) => Command;
   name: string;
+  ignoresFailure: boolean;
 }
 
 /** Data unit for recording fired events. */

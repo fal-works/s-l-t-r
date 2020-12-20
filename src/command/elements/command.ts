@@ -6,18 +6,33 @@ const rename: Command["rename"] = function (this: Command, name: string) {
   return this;
 };
 
+/** `ignoreFailure()` method of `Command`. */
+const ignoreFailure: Command["ignoreFailure"] = function (
+  this: Command,
+  yes = true
+) {
+  this.ignoresFailure = yes;
+  return this;
+};
+
 /** Creates a `Command` instance. */
-export const createCommand = (params: Omit<Command, "rename">): Command => ({
+export const createCommand = (
+  params: Omit<Command, "rename" | "ignoreFailure" | "ignoresFailure">
+): Command => ({
   ...params,
   rename,
+  ignoreFailure,
+  ignoresFailure: false,
 });
 
 const comparison: Command = {
   run: () => Promise.resolve(),
   type: CommandType.Unit,
   subType: CommandSubType.Null,
-  name: "",
   rename,
+  ignoreFailure,
+  name: "",
+  ignoresFailure: false,
 };
 
 /** @returns `true` if `obj` is (maybe) a `Command` object. */

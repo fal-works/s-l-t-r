@@ -29,7 +29,9 @@ const runUnitExternal = function (
       traceDone(name);
       return onEvent(this, Event.Success);
     },
-    (reason) => onEvent(this, Event.Failure) || Promise.reject(reason)
+    (reason) =>
+      onEvent(this, Event.Failure) ||
+      (this.ignoresFailure ? Promise.resolve() : Promise.reject(reason))
   );
 };
 
