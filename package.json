@@ -1,7 +1,7 @@
 {
   "name": "@fal-works/s-l-t-r",
   "description": "Something like a task runner.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "FAL",
   "bugs": {
     "url": "https://github.com/fal-works/s-l-t-r/issues"
