@@ -36,6 +36,7 @@
   "scripts": {
     "build": "yarn clean && tsc && yarn format",
     "clean": "rimraf lib/* & rimraf types/*",
+    "docs": "node test/dogfooding.js docs",
     "dogfood": "node test/dogfooding.js",
     "format": "yarn format:lib & yarn format:types",
     "format:lib": "eslint --fix lib/**/*.js",
