@@ -8,15 +8,15 @@ if (!require("fs").existsSync("lib/index.js")) {
 const sltr = require("../lib"); // lib files should be already created
 const { cmd, seq, par } = sltr;
 
-sltr.config.setResultSummaryType("list");
+// sltr.config.setResultSummaryType("list");
 
 // ---- Construct Commands ------------------------------------------------
 
-const rimraf = (files) => cmd("rimraf", files);
+const del = (files) => cmd("rimraf", files);
 const lint = (files) => cmd("eslint", "--fix", files);
 
 /** clean-up files in parallel */
-const clean = par(rimraf("lib/*"), rimraf("types/*")).rename("clean");
+const clean = par(del("lib/*"), del("types/*")).rename("clean");
 
 /** emit files into lib/types */
 const emit = cmd("tsc");
@@ -28,7 +28,7 @@ const format = par(lint("lib/**/*.js"), lint("types/**/*.ts")).rename("format");
 const build = seq(clean, emit, format).rename("build");
 
 /** emit docs (not included in build) */
-const docs = seq(rimraf("docs/*"), cmd("typedoc"));
+const docs = seq(del("docs/*"), cmd("typedoc"));
 
 // ---- Run ---------------------------------------------------------------
 
