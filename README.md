@@ -4,7 +4,8 @@ Something Like a Task Runner.
 
 - Run multiple commands in sequence or in parallel.
 - Simple. Lightweight. No dependencies.
-- Write your own script in JavaScript and construct any tree structure for defining the execution order.
+- Might be an alternative to NPM scripts (`node_modules/.bin` is automatically addded to `PATH`).
+- Write your own script in JS and construct any tree structure for defining the execution order.
 - Create a router so that you can run different commands according to arguments.
 - Check summary of execution results and see where it took time or where it failed.
 
@@ -18,21 +19,31 @@ npm install @fal-works/s-l-t-r
 ```
 
 
-## Usage Example
+## How to Use
 
-The script for building the library `s-l-t-r` itself looks like this:
+### Define Commands
+
+Here we will write a script and make a tree structure consisting of `Command` elements.
+
+- Use `cmd()` for defining a `Command` with a single command line.
+- Use `seq()` or `par()` for defining a grouping `Command` that runs multiple child `Command`s.  
+`seq()` for sequence, `par()` for parallel. They can be nested as well.
+
+For example, a script for building the library `s-l-t-r` itself (say `build.js`) would look like this:
 
 ```js
+// build.js
+
 /** import */
-const sltr = require("@fal-works/s-l-t-r");
-const { cmd, seq, par } = sltr; // functions for creating command elements
+const s_l_t_r = require("@fal-works/s-l-t-r");
+const { cmd, seq, par } = s_l_t_r; // functions for creating command elements
 
 /** prepare commands used frequently */
-const rimraf = (files) => cmd("rimraf", files);
+const del = (files) => cmd("rimraf", files);
 const lint = (files) => cmd("eslint", "--fix", files);
 
 /** clean-up files in parallel */
-const clean = par(rimraf("lib/*"), rimraf("types/*")).rename("clean");
+const clean = par(del("lib/*"), del("types/*")).rename("clean");
 
 /** emit files into lib/types */
 const emit = cmd("tsc");
@@ -44,21 +55,57 @@ const format = par(lint("lib/**/*.js"), lint("types/**/*.ts")).rename("format");
 const build = seq(clean, emit, format).rename("build");
 ```
 
-You can run it simply:
+Something more:
+
+- `seq()` and `par()` accept also any command line `string` values.
+- Use `rename()` method for changing the display name in the result summary.
+- Use `cmdEx()` for creating a `Command` from any `async` function.
+
+
+### Run
+
+Use `run()` to start executing any `Command`:
 
 ```js
-sltr.run(build);
+// build.js
+
+/* ...(see above)... */
+
+s_l_t_r.run(build);
 ```
 
-...or create a router so you can receive any key and run different commands.
+Now you can simply run the script with Node.js:
+
+```powershell
+# on the CLI or NPM script
+node build.js
+```
+
+### Routing
+
+As an alternative to the top-level `run()` function,  
+create a router so you can receive any key and run different `Command`s:
 
 ```js
-const router = sltr.tools.createRouter({ clean, emit, format, build });
+// build.js
 
-// Accepts the keys defined above: "clean", "emit", "format" or "build".
-// Otherwise it prints the registered mapping between keys and commands.
+/* ...(see above)... */
+
+/**
+ * This router accepts the keys: "clean", "emit", "format" or "build",
+ * otherwise it prints the registered mapping between keys and commands.
+ */
+const router = s_l_t_r.tools.createRouter({ clean, emit, format, build });
+
 const CLI_ARGUMENT = process.argv[2];
 router.run(CLI_ARGUMENT);
+```
+
+Now you can run the script passing any key that specifies the `Command` to be executed:
+
+```powershell
+# on the CLI or NPM script
+node build.js clean
 ```
 
 
@@ -79,11 +126,13 @@ ok   1.49s |     eslint --fix lib/**/*.js
 ok   1.24s |     eslint --fix types/**/*.ts
 ```
 
-...or it can also be flattend by changing the config:
+...or can also be flattend by changing the config:
 
 ```js
 sltr.config.setResultSummaryType("list"); // default: "tree"
 ```
+
+which looks like this:
 
 ```text
 ok   0.07s | rimraf lib/*

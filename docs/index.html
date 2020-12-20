@@ -82,7 +82,8 @@
 			<ul>
 				<li>Run multiple commands in sequence or in parallel.</li>
 				<li>Simple. Lightweight. No dependencies.</li>
-				<li>Write your own script in JavaScript and construct any tree structure for defining the execution order.</li>
+				<li>Might be an alternative to NPM scripts (<code>node_modules/.bin</code> is automatically addded to <code>PATH</code>).</li>
+				<li>Write your own script in JS and construct any tree structure for defining the execution order.</li>
 				<li>Create a router so that you can run different commands according to arguments.</li>
 				<li>Check summary of execution results and see where it took time or where it failed.</li>
 			</ul>
@@ -91,20 +92,30 @@
 				<h2>Install</h2>
 			</a>
 			<pre><code class="language-text">npm install @fal-works/s-l-t-r</code></pre>
-			<a href="#usage-example" id="usage-example" style="color: inherit; text-decoration: none;">
-				<h2>Usage Example</h2>
+			<a href="#how-to-use" id="how-to-use" style="color: inherit; text-decoration: none;">
+				<h2>How to Use</h2>
 			</a>
-			<p>The script for building the library <code>s-l-t-r</code> itself looks like this:</p>
-			<pre><code class="language-js"><span style="color: #008000">/** import */</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">sltr</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;@fal-works/s-l-t-r&quot;</span><span style="color: #000000">);</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> { </span><span style="color: #0070C1">cmd</span><span style="color: #000000">, </span><span style="color: #0070C1">seq</span><span style="color: #000000">, </span><span style="color: #0070C1">par</span><span style="color: #000000"> } = </span><span style="color: #001080">sltr</span><span style="color: #000000">; </span><span style="color: #008000">// functions for creating command elements</span>
+			<a href="#define-commands" id="define-commands" style="color: inherit; text-decoration: none;">
+				<h3>Define Commands</h3>
+			</a>
+			<p>Here we will write a script and make a tree structure consisting of <code>Command</code> elements.</p>
+			<ul>
+				<li>Use <code>cmd()</code> for defining a <code>Command</code> with a single command line.</li>
+				<li>Use <code>seq()</code> or <code>par()</code> for defining a grouping <code>Command</code> that runs multiple child <code>Command</code>s.<br><code>seq()</code> for sequence, <code>par()</code> for parallel. They can be nested as well.</li>
+			</ul>
+			<p>For example, a script for building the library <code>s-l-t-r</code> itself (say <code>build.js</code>) would look like this:</p>
+			<pre><code class="language-js"><span style="color: #008000">// build.js</span>
+
+<span style="color: #008000">/** import */</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">s_l_t_r</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;@fal-works/s-l-t-r&quot;</span><span style="color: #000000">);</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> { </span><span style="color: #0070C1">cmd</span><span style="color: #000000">, </span><span style="color: #0070C1">seq</span><span style="color: #000000">, </span><span style="color: #0070C1">par</span><span style="color: #000000"> } = </span><span style="color: #001080">s_l_t_r</span><span style="color: #000000">; </span><span style="color: #008000">// functions for creating command elements</span>
 
 <span style="color: #008000">/** prepare commands used frequently */</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">rimraf</span><span style="color: #000000"> = (</span><span style="color: #001080">files</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #795E26">cmd</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;rimraf&quot;</span><span style="color: #000000">, </span><span style="color: #001080">files</span><span style="color: #000000">);</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">del</span><span style="color: #000000"> = (</span><span style="color: #001080">files</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #795E26">cmd</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;rimraf&quot;</span><span style="color: #000000">, </span><span style="color: #001080">files</span><span style="color: #000000">);</span>
 <span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">lint</span><span style="color: #000000"> = (</span><span style="color: #001080">files</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #795E26">cmd</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;eslint&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;--fix&quot;</span><span style="color: #000000">, </span><span style="color: #001080">files</span><span style="color: #000000">);</span>
 
 <span style="color: #008000">/** clean-up files in parallel */</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">clean</span><span style="color: #000000"> = </span><span style="color: #795E26">par</span><span style="color: #000000">(</span><span style="color: #795E26">rimraf</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;lib/*&quot;</span><span style="color: #000000">), </span><span style="color: #795E26">rimraf</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;types/*&quot;</span><span style="color: #000000">)).</span><span style="color: #795E26">rename</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;clean&quot;</span><span style="color: #000000">);</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">clean</span><span style="color: #000000"> = </span><span style="color: #795E26">par</span><span style="color: #000000">(</span><span style="color: #795E26">del</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;lib/*&quot;</span><span style="color: #000000">), </span><span style="color: #795E26">del</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;types/*&quot;</span><span style="color: #000000">)).</span><span style="color: #795E26">rename</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;clean&quot;</span><span style="color: #000000">);</span>
 
 <span style="color: #008000">/** emit files into lib/types */</span>
 <span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">emit</span><span style="color: #000000"> = </span><span style="color: #795E26">cmd</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;tsc&quot;</span><span style="color: #000000">);</span>
@@ -115,16 +126,46 @@
 <span style="color: #008000">/** do all of the above in sequence */</span>
 <span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">build</span><span style="color: #000000"> = </span><span style="color: #795E26">seq</span><span style="color: #000000">(</span><span style="color: #001080">clean</span><span style="color: #000000">, </span><span style="color: #001080">emit</span><span style="color: #000000">, </span><span style="color: #001080">format</span><span style="color: #000000">).</span><span style="color: #795E26">rename</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;build&quot;</span><span style="color: #000000">);</span>
 </code></pre>
-			<p>You can run it simply:</p>
-			<pre><code class="language-js"><span style="color: #001080">sltr</span><span style="color: #000000">.</span><span style="color: #795E26">run</span><span style="color: #000000">(</span><span style="color: #001080">build</span><span style="color: #000000">);</span>
-</code></pre>
-			<p>...or create a router so you can receive any key and run different commands.</p>
-			<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">router</span><span style="color: #000000"> = </span><span style="color: #001080">sltr</span><span style="color: #000000">.</span><span style="color: #001080">tools</span><span style="color: #000000">.</span><span style="color: #795E26">createRouter</span><span style="color: #000000">({ </span><span style="color: #001080">clean</span><span style="color: #000000">, </span><span style="color: #001080">emit</span><span style="color: #000000">, </span><span style="color: #001080">format</span><span style="color: #000000">, </span><span style="color: #001080">build</span><span style="color: #000000"> });</span>
+			<p>Something more:</p>
+			<ul>
+				<li><code>seq()</code> and <code>par()</code> accept also any command line <code>string</code> values.</li>
+				<li>Use <code>rename()</code> method for changing the display name in the result summary.</li>
+				<li>Use <code>cmdEx()</code> for creating a <code>Command</code> from any <code>async</code> function.</li>
+			</ul>
+			<a href="#run" id="run" style="color: inherit; text-decoration: none;">
+				<h3>Run</h3>
+			</a>
+			<p>Use <code>run()</code> to start executing any <code>Command</code>:</p>
+			<pre><code class="language-js"><span style="color: #008000">// build.js</span>
 
-<span style="color: #008000">// Accepts the keys defined above: &quot;clean&quot;, &quot;emit&quot;, &quot;format&quot; or &quot;build&quot;.</span>
-<span style="color: #008000">// Otherwise it prints the registered mapping between keys and commands.</span>
+<span style="color: #008000">/* ...(see above)... */</span>
+
+<span style="color: #001080">s_l_t_r</span><span style="color: #000000">.</span><span style="color: #795E26">run</span><span style="color: #000000">(</span><span style="color: #001080">build</span><span style="color: #000000">);</span>
+</code></pre>
+			<p>Now you can simply run the script with Node.js:</p>
+			<pre><code class="language-powershell"><span style="color: #008000"># on the CLI or NPM script</span>
+<span style="color: #000000">node build.js</span>
+</code></pre>
+			<a href="#routing" id="routing" style="color: inherit; text-decoration: none;">
+				<h3>Routing</h3>
+			</a>
+			<p>As an alternative to the top-level <code>run()</code> function,<br>create a router so you can receive any key and run different <code>Command</code>s:</p>
+			<pre><code class="language-js"><span style="color: #008000">// build.js</span>
+
+<span style="color: #008000">/* ...(see above)... */</span>
+
+<span style="color: #008000">/**</span>
+<span style="color: #008000"> * This router accepts the keys: &quot;clean&quot;, &quot;emit&quot;, &quot;format&quot; or &quot;build&quot;,</span>
+<span style="color: #008000"> * otherwise it prints the registered mapping between keys and commands.</span>
+<span style="color: #008000"> */</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">router</span><span style="color: #000000"> = </span><span style="color: #001080">s_l_t_r</span><span style="color: #000000">.</span><span style="color: #001080">tools</span><span style="color: #000000">.</span><span style="color: #795E26">createRouter</span><span style="color: #000000">({ </span><span style="color: #001080">clean</span><span style="color: #000000">, </span><span style="color: #001080">emit</span><span style="color: #000000">, </span><span style="color: #001080">format</span><span style="color: #000000">, </span><span style="color: #001080">build</span><span style="color: #000000"> });</span>
+
 <span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">CLI_ARGUMENT</span><span style="color: #000000"> = </span><span style="color: #001080">process</span><span style="color: #000000">.</span><span style="color: #001080">argv</span><span style="color: #000000">[</span><span style="color: #098658">2</span><span style="color: #000000">];</span>
 <span style="color: #001080">router</span><span style="color: #000000">.</span><span style="color: #795E26">run</span><span style="color: #000000">(</span><span style="color: #0070C1">CLI_ARGUMENT</span><span style="color: #000000">);</span>
+</code></pre>
+			<p>Now you can run the script passing any key that specifies the <code>Command</code> to be executed:</p>
+			<pre><code class="language-powershell"><span style="color: #008000"># on the CLI or NPM script</span>
+<span style="color: #000000">node build.js clean</span>
 </code></pre>
 			<a href="#result-summary" id="result-summary" style="color: inherit; text-decoration: none;">
 				<h2>Result Summary</h2>
@@ -139,9 +180,10 @@ ok   2.33s |   tsc
 --         |   [par] format
 ok   1.49s |     eslint --fix lib/**/*.js
 ok   1.24s |     eslint --fix types/**/*.ts</code></pre>
-			<p>...or it can also be flattend by changing the config:</p>
+			<p>...or can also be flattend by changing the config:</p>
 			<pre><code class="language-js"><span style="color: #001080">sltr</span><span style="color: #000000">.</span><span style="color: #001080">config</span><span style="color: #000000">.</span><span style="color: #795E26">setResultSummaryType</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;list&quot;</span><span style="color: #000000">); </span><span style="color: #008000">// default: &quot;tree&quot;</span>
 </code></pre>
+			<p>which looks like this:</p>
 			<pre><code class="language-text">ok   0.07s | rimraf lib/*
 ok   0.07s | rimraf types/*
 ok   2.21s | tsc
@@ -191,7 +233,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/e6b6b88/src/command/elements/line.ts#L39">command/elements/line.ts:39</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/elements/line.ts#L39">command/elements/line.ts:39</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -222,7 +264,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/e6b6b88/src/command/elements/external.ts#L42">command/elements/external.ts:42</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/elements/external.ts#L42">command/elements/external.ts:42</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -271,7 +313,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/e6b6b88/src/command/elements/line.ts#L52">command/elements/line.ts:52</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/elements/line.ts#L52">command/elements/line.ts:52</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -299,7 +341,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/e6b6b88/src/command-line.ts#L29">command-line.ts:29</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command-line.ts#L29">command-line.ts:29</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -330,7 +372,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/e6b6b88/src/command-line.ts#L43">command-line.ts:43</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command-line.ts#L43">command-line.ts:43</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -362,7 +404,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/e6b6b88/src/command/elements/null-command.ts#L26">command/elements/null-command.ts:26</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/elements/null-command.ts#L26">command/elements/null-command.ts:26</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -391,7 +433,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/e6b6b88/src/command/elements/parallel.ts#L54">command/elements/parallel.ts:54</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/elements/parallel.ts#L54">command/elements/parallel.ts:54</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -419,7 +461,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/e6b6b88/src/command/runner/run.ts#L11">command/runner/run.ts:11</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/runner/run.ts#L11">command/runner/run.ts:11</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -501,7 +543,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/e6b6b88/src/command/elements/sequence.ts#L46">command/elements/sequence.ts:46</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/elements/sequence.ts#L46">command/elements/sequence.ts:46</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
