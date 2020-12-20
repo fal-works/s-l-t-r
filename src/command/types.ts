@@ -23,8 +23,14 @@ export const Event = {
 } as const;
 export type Event = typeof Event[keyof typeof Event];
 
-/** Function for hadnling command events. */
-export type EventHandler = (command: Command, event: Event) => void;
+/**
+ * Function for handling command events.
+ * If it returns a `Promise`, it overrides the default behavior of `command`.
+ */
+export type EventHandler = (
+  command: Command,
+  event: Event
+) => Promise<void> | undefined;
 
 /** Command object. Can be wrapped with `seq()` or `par()`. */
 export interface Command {

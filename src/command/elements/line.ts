@@ -22,16 +22,15 @@ const runUnit = function (
   const { line, name } = this;
   traceRun(name);
 
-  onEvent(this, Event.Start);
+  const startResult = onEvent(this, Event.Start);
+  if (startResult) return startResult;
+
   return commandLine.execLineWithoutLog(line).then(
     () => {
       traceDone(name);
-      onEvent(this, Event.Success);
+      return onEvent(this, Event.Success);
     },
-    (reason) => {
-      onEvent(this, Event.Failure);
-      return Promise.reject(reason);
-    }
+    (reason) => onEvent(this, Event.Failure) || Promise.reject(reason)
   );
 };
 

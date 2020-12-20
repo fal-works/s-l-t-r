@@ -31,16 +31,20 @@ const runPar = async function (
   this: ParallelCommand,
   onEvent: EventHandler
 ): Promise<void> {
-  onEvent(this, Event.Start);
+  const startResult = onEvent(this, Event.Start);
+  if (startResult) return startResult;
+
   const promises = this.children.map(runCommandInPar(onEvent));
   const errors = await Promise.all(promises);
   for (const err of errors) {
     if (err) {
-      onEvent(this, Event.Failure);
-      return Promise.reject("Found error in parallel commands.");
+      return (
+        onEvent(this, Event.Failure) ||
+        Promise.reject("Found error in parallel commands.")
+      );
     }
   }
-  onEvent(this, Event.Success);
+  return onEvent(this, Event.Success);
 };
 
 /** Emits debug log. */

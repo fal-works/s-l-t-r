@@ -21,16 +21,15 @@ const runSeq = function (
 ): Promise<void> {
   let promiseChain = Promise.resolve();
 
-  onEvent(this, Event.Start);
+  const startResult = onEvent(this, Event.Start);
+  if (startResult) return startResult;
+
   for (const child of this.children)
     promiseChain = promiseChain.then(child.run.bind(child, onEvent));
 
   return promiseChain.then(
     () => onEvent(this, Event.Success),
-    (reason) => {
-      onEvent(this, Event.Failure);
-      return Promise.reject(reason);
-    }
+    (reason) => onEvent(this, Event.Failure) || Promise.reject(reason)
   );
 };
 

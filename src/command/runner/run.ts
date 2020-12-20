@@ -19,16 +19,17 @@ export const run = async (
 
   const recorder = createRecorder();
 
-  const recordEvent: EventHandler = (command, event): void => {
+  const recordEvent: EventHandler = (command, event) => {
     recorder.record(command, event);
     if (command.type === CommandType.Unit && event === Event.Success)
       log(`done ${(numComplete += 1)} / ${numTotal}`);
+    return undefined;
   };
 
   const eventHandler: EventHandler = onEvent
     ? (command, event) => {
         recordEvent(command, event);
-        onEvent(command, event);
+        return onEvent(command, event);
       }
     : recordEvent;
 
