@@ -60,7 +60,7 @@ Something more:
 - `seq()` and `par()` accept also any command line `string` values.
 - Use `cmdEx()` for creating a `Command` from any `async` function.
 - Use `rename()` method for changing the display name in the result summary.
-- Use `ignoreFailure()` method if you want to run the subsequent commands whether the command in question succeeds or not.
+- Use `ignoreFailure()` method if you want to run subsequent commands whether the command in question succeeds or not.
 
 
 ### Run

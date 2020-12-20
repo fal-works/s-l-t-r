@@ -129,8 +129,9 @@
 			<p>Something more:</p>
 			<ul>
 				<li><code>seq()</code> and <code>par()</code> accept also any command line <code>string</code> values.</li>
-				<li>Use <code>rename()</code> method for changing the display name in the result summary.</li>
 				<li>Use <code>cmdEx()</code> for creating a <code>Command</code> from any <code>async</code> function.</li>
+				<li>Use <code>rename()</code> method for changing the display name in the result summary.</li>
+				<li>Use <code>ignoreFailure()</code> method if you want to run subsequent commands whether the command in question succeeds or not.</li>
 			</ul>
 			<a href="#run" id="run" style="color: inherit; text-decoration: none;">
 				<h3>Run</h3>
@@ -232,7 +233,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/elements/line.ts#L39">command/elements/line.ts:39</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/elements/line.ts#L40">command/elements/line.ts:40</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -263,7 +264,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/elements/external.ts#L42">command/elements/external.ts:42</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/elements/external.ts#L43">command/elements/external.ts:43</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -312,7 +313,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/elements/line.ts#L52">command/elements/line.ts:52</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/elements/line.ts#L53">command/elements/line.ts:53</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -340,7 +341,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command-line.ts#L29">command-line.ts:29</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command-line.ts#L29">command-line.ts:29</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -371,7 +372,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command-line.ts#L43">command-line.ts:43</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command-line.ts#L43">command-line.ts:43</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -403,7 +404,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/elements/null-command.ts#L26">command/elements/null-command.ts:26</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/elements/null-command.ts#L26">command/elements/null-command.ts:26</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -432,7 +433,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/elements/parallel.ts#L54">command/elements/parallel.ts:54</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/elements/parallel.ts#L62">command/elements/parallel.ts:62</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -460,7 +461,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/runner/run.ts#L11">command/runner/run.ts:11</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/runner/run.ts#L11">command/runner/run.ts:11</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -542,7 +543,7 @@ ok   1.23s | eslint --fix types/**/*.ts</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/elements/sequence.ts#L46">command/elements/sequence.ts:46</a></li>
+								<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/elements/sequence.ts#L47">command/elements/sequence.ts:47</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

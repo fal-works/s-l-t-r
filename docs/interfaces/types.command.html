@@ -50,6 +50,12 @@
 					<a href="types.command.html#children" class="tsd-kind-icon">children</a>
 				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-interface">
+					<a href="types.command.html#ignorefailure" class="tsd-kind-icon">ignore<wbr>Failure</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-interface">
+					<a href="types.command.html#ignoresfailure" class="tsd-kind-icon">ignores<wbr>Failure</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-interface">
 					<a href="types.command.html#name" class="tsd-kind-icon">name</a>
 				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-interface">
@@ -123,6 +129,8 @@
 						<h3>Properties</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.command.html#children" class="tsd-kind-icon">children</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.command.html#ignorefailure" class="tsd-kind-icon">ignore<wbr>Failure</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.command.html#ignoresfailure" class="tsd-kind-icon">ignores<wbr>Failure</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.command.html#name" class="tsd-kind-icon">name</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.command.html#rename" class="tsd-kind-icon">rename</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.command.html#run" class="tsd-kind-icon">run</a></li>
@@ -141,7 +149,48 @@
 				<div class="tsd-signature tsd-kind-icon">children<span class="tsd-signature-symbol">:</span> <a href="types.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">[]</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/types.ts#L34">command/types.ts:34</a></li>
+						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/types.ts#L40">command/types.ts:40</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<a name="ignorefailure" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> ignore<wbr>Failure</h3>
+				<div class="tsd-signature tsd-kind-icon">ignore<wbr>Failure<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>yes<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="types.command.html" class="tsd-signature-type">Command</a></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/types.ts#L42">command/types.ts:42</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-type-declaration">
+					<h4>Type declaration</h4>
+					<ul class="tsd-parameters">
+						<li class="tsd-parameter-signature">
+							<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-interface">
+								<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>yes<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="types.command.html" class="tsd-signature-type">Command</a></li>
+							</ul>
+							<ul class="tsd-descriptions">
+								<li class="tsd-description">
+									<h4 class="tsd-parameters-title">Parameters</h4>
+									<ul class="tsd-parameters">
+										<li>
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> yes: <span class="tsd-signature-type">boolean</span></h5>
+										</li>
+									</ul>
+									<h4 class="tsd-returns-title">Returns <a href="types.command.html" class="tsd-signature-type">Command</a></h4>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<a name="ignoresfailure" class="tsd-anchor"></a>
+				<h3>ignores<wbr>Failure</h3>
+				<div class="tsd-signature tsd-kind-icon">ignores<wbr>Failure<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/types.ts#L44">command/types.ts:44</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -151,7 +200,7 @@
 				<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/types.ts#L36">command/types.ts:36</a></li>
+						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/types.ts#L43">command/types.ts:43</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -161,7 +210,7 @@
 				<div class="tsd-signature tsd-kind-icon">rename<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="types.command.html" class="tsd-signature-type">Command</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/types.ts#L35">command/types.ts:35</a></li>
+						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/types.ts#L41">command/types.ts:41</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -192,7 +241,7 @@
 				<div class="tsd-signature tsd-kind-icon">run<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>onEvent<span class="tsd-signature-symbol">: </span><a href="../modules/types.html#eventhandler" class="tsd-signature-type">EventHandler</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/types.ts#L31">command/types.ts:31</a></li>
+						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/types.ts#L37">command/types.ts:37</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -223,7 +272,7 @@
 				<div class="tsd-signature tsd-kind-icon">sub<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="../modules/types.html#commandsubtype-1" class="tsd-signature-type">CommandSubType</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/types.ts#L33">command/types.ts:33</a></li>
+						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/types.ts#L39">command/types.ts:39</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -233,7 +282,7 @@
 				<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../modules/types.html#commandtype-1" class="tsd-signature-type">CommandType</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/3366fdc/src/command/types.ts#L32">command/types.ts:32</a></li>
+						<li>Defined in <a href="https://github.com/fal-works/s-l-t-r/blob/deb87a4/src/command/types.ts#L38">command/types.ts:38</a></li>
 					</ul>
 				</aside>
 			</section>
