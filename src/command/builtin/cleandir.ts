@@ -6,14 +6,14 @@ const returnVoid = () => {};
 const options = { recursive: true };
 
 /**
- * Removes a directory including all of its contents,
- * then makes an empty directory again.
+ * Removes all contents of a directory, or creates the directory if absent.
+ * (Actually it tries `rmdir()` and then `mkdir()`).
  */
-export const clean = (dirPath: fs.PathLike): Command => {
+export const cleandir = (dirPath: fs.PathLike): Command => {
   const removeDir = () => fs.promises.rmdir(dirPath, options).catch(returnVoid);
   const makeDir = () => fs.promises.mkdir(dirPath, options);
   return cmdEx(
     () => removeDir().then(makeDir).then(returnVoid),
-    `clean ${dirPath}`
+    `cleandir ${dirPath}`
   );
 };
