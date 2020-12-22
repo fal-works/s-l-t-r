@@ -2,6 +2,8 @@ import * as fs from "fs";
 import { Command } from "../types";
 import { cmdEx } from "../elements";
 
+const returnVoid = () => {};
+
 /**
  * Creates a `Command` that calls `fs.promises.unlink()`.
  */
@@ -41,7 +43,7 @@ type MkdirParams = Parameters<typeof fs.promises.mkdir>;
  */
 export const mkdir = (path: fs.PathLike, options?: MkdirParams[1]): Command =>
   cmdEx(
-    async () => fs.promises.mkdir(path, options).then(() => {}),
+    async () => fs.promises.mkdir(path, options).then(returnVoid),
     `mkdir ${path}`
   );
 
@@ -53,7 +55,7 @@ type RmdirParams = Parameters<typeof fs.promises.rmdir>;
  */
 export const rmdir = (path: fs.PathLike, options?: RmdirParams[1]): Command =>
   cmdEx(
-    async () => fs.promises.rmdir(path, options).then(() => {}),
+    async () => fs.promises.rmdir(path, options).then(returnVoid),
     `rmdir ${path}`
   );
 
