@@ -48,6 +48,3 @@ export const cmd = (command: string, ...args: string[]): LineCommand => {
   });
   return Object.assign(base, { line });
 };
-
-/** Creates an `echo` command (does not be run immediately). */
-export const echo = (s: string): Command => cmd("echo", s);

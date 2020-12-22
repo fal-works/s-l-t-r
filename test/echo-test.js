@@ -1,5 +1,6 @@
 const sltr = require("../lib");
-const { run, echo, seq, par } = sltr;
+const { run, seq, par, builtin } = sltr;
+const { echo } = builtin;
 
 // sltr.config.setResultSummaryType("list");
 

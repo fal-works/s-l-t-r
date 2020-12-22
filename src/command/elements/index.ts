@@ -1,4 +1,4 @@
-export { cmd, echo } from "./line";
+export { cmd } from "./line";
 export { cmdEx } from "./external";
 export { nullCmd } from "./null-command";
 
