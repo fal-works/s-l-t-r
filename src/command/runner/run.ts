@@ -60,5 +60,7 @@ export const run = async (
     newLine();
   }
 
+  if (numComplete === numTotal) log("Successfully completed. Maybe.");
+
   return recorder.historyMap;
 };
