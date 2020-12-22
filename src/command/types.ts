@@ -43,20 +43,22 @@ export interface Command {
   readonly run: (onEvent: EventHandler) => Promise<void>;
   readonly type: CommandType;
   readonly subType: CommandSubType;
-  readonly children?: Command[];
+  readonly children?: readonly Command[];
+
+  readonly ignoresFailure: boolean;
+  readonly ignoreFailure: () => Command;
+
+  readonly name: string;
   readonly rename: (name: string) => Command;
-  readonly ignoreFailure: (yes?: boolean) => Command;
+  readonly displayState: DisplayState | undefined;
   readonly hide: () => Command;
   readonly collapse: () => Command;
-  name: string;
-  ignoresFailure: boolean;
-  displayState: DisplayState | undefined;
 }
 
 /** Data unit for recording fired events. */
 export interface EventRecord {
-  event: Event;
-  timestamp: number;
+  readonly event: Event;
+  readonly timestamp: number;
 }
 
 /** Return value from `run()`. */

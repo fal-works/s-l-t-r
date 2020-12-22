@@ -10,8 +10,8 @@ import { createCommand } from "./command";
 import { normalizeCommands, getCommandNames } from "./group-utility";
 
 interface SequenceCommand extends Command {
-  children: Command[];
-  name: string;
+  readonly children: readonly Command[];
+  readonly name: string;
 }
 
 /** `run()` method for `SequenceCommand`. */

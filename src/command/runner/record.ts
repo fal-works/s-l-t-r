@@ -2,9 +2,9 @@ import { Command, Event, EventRecord } from "../types";
 
 /** Object for recording multiple `EventRecord`s. */
 export interface Recorder {
-  historyMap: Map<Command, EventRecord[]>;
-  record: (command: Command, event: Event) => void;
-  getHistory: (command: Command) => EventRecord[];
+  readonly historyMap: Map<Command, EventRecord[]>;
+  readonly record: (command: Command, event: Event) => void;
+  readonly getHistory: (command: Command) => EventRecord[];
 }
 
 /**

@@ -9,17 +9,14 @@ const cloneHidden = (command: Command): Command => {
 
 /** `rename()` method of `Command`. */
 const rename: Command["rename"] = function (this: Command, name: string) {
-  this.name = name;
-  return this;
+  const newProps: Pick<Command, "name"> = { name };
+  return Object.assign(Object.create(this), newProps);
 };
 
 /** `ignoreFailure()` method of `Command`. */
-const ignoreFailure: Command["ignoreFailure"] = function (
-  this: Command,
-  yes = true
-) {
-  this.ignoresFailure = yes;
-  return this;
+const ignoreFailure: Command["ignoreFailure"] = function (this: Command) {
+  const newProps: Pick<Command, "ignoresFailure"> = { ignoresFailure: true };
+  return Object.assign(Object.create(this), newProps);
 };
 
 /** `collapse()` method of `Command`. */
@@ -32,8 +29,8 @@ const collapse: Command["collapse"] = function (this: Command) {
   const { children } = this;
   if (children && children.length) {
     const newProps: Pick<Command, "children" | "displayState"> = {
-      displayState: DisplayState.Collapsed,
       children: children.map(cloneHidden),
+      displayState: DisplayState.Collapsed,
     };
     return Object.assign(Object.create(this), newProps);
   } else return this;
@@ -41,23 +38,23 @@ const collapse: Command["collapse"] = function (this: Command) {
 
 type CreateCommandParams = Omit<
   Command,
-  | "rename"
   | "ignoreFailure"
   | "ignoresFailure"
+  | "rename"
+  | "displayState"
   | "hide"
   | "collapse"
-  | "displayState"
 >;
 
 /** Creates a `Command` instance. */
 export const createCommand = (params: CreateCommandParams): Command => ({
   ...params,
-  rename,
-  ignoreFailure,
   ignoresFailure: false,
+  ignoreFailure,
+  rename,
+  displayState: undefined,
   hide,
   collapse,
-  displayState: undefined,
 });
 
 const comparison: Command = createCommand({

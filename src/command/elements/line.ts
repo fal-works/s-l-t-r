@@ -11,7 +11,7 @@ import { createCommand } from "./command";
 
 /** `Command` that runs a single command line. */
 interface LineCommand extends Command {
-  line: string;
+  readonly line: string;
 }
 
 /** `run()` method for `LineCommand`. */

@@ -10,7 +10,7 @@ import { createCommand } from "./command";
 
 /** `Command` that runs an external asynchronous function. */
 interface ExternalCommand extends Command {
-  runner: () => Promise<void>;
+  readonly runner: () => Promise<void>;
 }
 
 /** `run()` method for `ExternalCommand`. */

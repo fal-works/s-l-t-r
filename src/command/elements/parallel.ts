@@ -23,7 +23,7 @@ const runCommandInPar = (onEvent: EventHandler) => (command: Command) =>
   );
 
 interface ParallelCommand extends Command {
-  children: Command[];
+  readonly children: readonly Command[];
 }
 
 /** `run()` method for `ParallelCommand`. */
