@@ -1,27 +1,30 @@
-import { Command, CommandType } from "../types";
+import { Command } from "../types";
 
 /**
- * Runs `callback` for `topCommand` and all of its descendants
- * in a depth-first order.
+ * Callback to be passed to `depthFirstSearch()`.
+ * Should return `true` to return `command` and stop traversing.
+ */
+export type CallbackFunction = (command: Command, depth: number) => boolean;
+
+/**
+ * Runs `callback` for `topCommand` and all of its descendants in a
+ * depth-first order, until it finds any `Command` that matches the predicate.
  */
 export const depthFirstSearch = (
   topCommand: Command,
-  callback: (command: Command, depth: number) => any,
+  callback: CallbackFunction,
   currentDepth = 0
-): void => {
-  callback(topCommand, currentDepth);
-  if (!topCommand.children) return;
+): Command | undefined => {
+  const found = callback(topCommand, currentDepth);
+  if (found) return topCommand;
+
+  if (!topCommand.children) return undefined;
 
   const childDepth = currentDepth + 1;
-  for (const child of topCommand.children)
-    depthFirstSearch(child, callback, childDepth);
-};
+  for (const child of topCommand.children) {
+    const foundCommand = depthFirstSearch(child, callback, childDepth);
+    if (foundCommand) return foundCommand;
+  }
 
-/** Count all descendant unit commands beginning from `topCommand`. */
-export const countUnitCommands = (topCommand: Command): number => {
-  let numCommands = 0;
-  depthFirstSearch(topCommand, (command) => {
-    if (command.type === CommandType.Unit) numCommands += 1;
-  });
-  return numCommands;
+  return undefined;
 };

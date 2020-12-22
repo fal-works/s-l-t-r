@@ -1,7 +1,7 @@
 import { warn } from "../../log";
 import { Command } from "../types";
 import { cmd } from "./line";
-import { isCommand } from "./command";
+import { isMaybeCommand } from "./command";
 
 /** Normalizes the type of `command`. */
 const normalizeCommand = (command: Command | string): Command | null => {
@@ -9,7 +9,7 @@ const normalizeCommand = (command: Command | string): Command | null => {
     case "string":
       return cmd(command);
     case "object":
-      if (isCommand(command)) return command;
+      if (isMaybeCommand(command)) return command;
       break;
   }
 

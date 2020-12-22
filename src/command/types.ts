@@ -32,6 +32,12 @@ export type EventHandler = (
   event: Event
 ) => Promise<void> | undefined;
 
+export const DisplayState = {
+  Collapsed: "collapsed",
+  Hidden: "hidden",
+} as const;
+export type DisplayState = typeof DisplayState[keyof typeof DisplayState];
+
 /** Command object. Can be wrapped with `seq()` or `par()`. */
 export interface Command {
   readonly run: (onEvent: EventHandler) => Promise<void>;
@@ -40,8 +46,11 @@ export interface Command {
   readonly children?: Command[];
   readonly rename: (name: string) => Command;
   readonly ignoreFailure: (yes?: boolean) => Command;
+  readonly hide: () => Command;
+  readonly collapse: () => Command;
   name: string;
   ignoresFailure: boolean;
+  displayState: DisplayState | undefined;
 }
 
 /** Data unit for recording fired events. */

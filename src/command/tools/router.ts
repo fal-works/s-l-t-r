@@ -1,12 +1,12 @@
 import { log, newLine, println } from "../../log";
 import { Command, EventRecord, Router } from "../types";
 import * as runner from "../runner";
-import { isCommand } from "../elements/command";
+import { isMaybeCommand } from "../elements/command";
 
 const normalizeKeyCommandMap = (keyCommandMap: Record<string, Command>) => {
   const newMap = new Map<string, Command>();
   for (const [key, command] of Object.entries(keyCommandMap)) {
-    if (!isCommand(command)) continue;
+    if (!isMaybeCommand(command)) continue;
     newMap.set(key, command);
   }
   return newMap;

@@ -1,14 +1,19 @@
+import { warn } from "../../log";
 import { ResultSummaryType, resultSummaryType } from "../../config";
 import {
   Command,
   CommandSubType,
   CommandType,
+  DisplayState,
   Event,
   EventRecord,
 } from "../types";
-import { depthFirstSearch } from "../tools";
+import { depthFirstSearch } from "../tools/traverse";
 import { Recorder } from "./record";
-import { warn } from "../../log";
+import { shouldCalc } from "./predicates";
+
+const { Unit, Group } = CommandType;
+const { Collapsed, Hidden } = DisplayState;
 
 const getResultType = (history: EventRecord[]): string => {
   const last = history[history.length - 1];
@@ -39,7 +44,7 @@ const durationWidth = 5;
 const durationFractionDigits = 2;
 const resultWidth = resultTypeWidth + durationWidth + 2;
 
-const renderUnitResult = (command: Command, recorder: Recorder): void => {
+const printResultField = (command: Command, recorder: Recorder): void => {
   const history = recorder.getHistory(command);
   const resultType = getResultType(history);
   const duration = calcDurationSec(history);
@@ -51,38 +56,26 @@ const renderUnitResult = (command: Command, recorder: Recorder): void => {
   stdout.write("s ");
 };
 
-const renderGroupResult = (): void => {
-  const { stdout } = process;
-  const resultType = "--";
-  stdout.write(resultType);
-  stdout.write(" ".repeat(resultWidth - resultType.length));
-};
-
-const renderCommandResult = (command: Command, recorder: Recorder): void => {
-  switch (command.type) {
-    case CommandType.Unit:
-      renderUnitResult(command, recorder);
-      break;
-    case CommandType.Group:
-      renderGroupResult();
-  }
+const renderResultField = (command: Command, recorder: Recorder): void => {
+  if (shouldCalc(command)) printResultField(command, recorder);
+  else process.stdout.write(" ".repeat(resultWidth));
 };
 
 /** Outputs result summary in a list form. */
-const renderResultList = (topCommand: Command, recorder: Recorder): void => {
+const renderList = (topCommand: Command, recorder: Recorder): void => {
   const { stdout } = process;
 
   depthFirstSearch(topCommand, (command) => {
-    switch (command.type) {
-      case CommandType.Unit:
-        renderUnitResult(command, recorder);
-        stdout.write("| ");
-        stdout.write(command.name);
-        stdout.write("\n");
-        break;
-      case CommandType.Group:
-        break;
-    }
+    if (command.displayState === Hidden) return false;
+    if (command.type === Group && command.displayState !== Collapsed)
+      return false;
+
+    printResultField(command, recorder);
+    stdout.write("| ");
+    stdout.write(getDisplayName(command));
+    stdout.write("\n");
+
+    return false;
   });
 };
 
@@ -90,11 +83,11 @@ const getDisplayName = (command: Command): string => {
   let prefix: string;
 
   switch (command.type) {
-    case CommandType.Unit:
+    case Unit:
       prefix = "";
       break;
 
-    case CommandType.Group:
+    case Group:
       switch (command.subType) {
         case CommandSubType.Sequence:
           prefix = "[seq] ";
@@ -113,16 +106,20 @@ const getDisplayName = (command: Command): string => {
 };
 
 /** Outputs result summary in a tree form. */
-const renderResultTree = (topCommand: Command, recorder: Recorder): void => {
+const renderTree = (topCommand: Command, recorder: Recorder): void => {
   const { stdout } = process;
 
   depthFirstSearch(topCommand, (command, depth) => {
-    renderCommandResult(command, recorder);
+    if (command.displayState === Hidden) return false;
+
+    renderResultField(command, recorder);
 
     stdout.write("| ");
     stdout.write("  ".repeat(depth));
     stdout.write(getDisplayName(command));
     stdout.write("\n");
+
+    return false;
   });
 };
 
@@ -133,10 +130,10 @@ export const renderResultSummary = (
 ): void => {
   switch (resultSummaryType) {
     case ResultSummaryType.Tree:
-      renderResultTree(topCommand, recorder);
+      renderTree(topCommand, recorder);
       break;
     case ResultSummaryType.List:
-      renderResultList(topCommand, recorder);
+      renderList(topCommand, recorder);
       break;
     case null:
       break;
