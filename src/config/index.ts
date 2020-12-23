@@ -11,3 +11,10 @@ export let resultSummaryType: ResultSummaryType | null = ResultSummaryType.Tree;
 export const setResultSummaryType = (type: ResultSummaryType | null): void => {
   resultSummaryType = type;
 };
+
+export let quiet = false;
+
+/** Suppress log messages. */
+export const setQuiet = (yes = true): void => {
+  quiet = yes;
+};

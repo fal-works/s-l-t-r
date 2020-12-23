@@ -1,1 +1,1 @@
-export { ResultSummaryType, setResultSummaryType } from "./";
+export { ResultSummaryType, setResultSummaryType, setQuiet } from "./";

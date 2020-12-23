@@ -147,3 +147,12 @@ You can also change the display in the summary for each `Command` individually:
 - Use `rename()` method for changing the display name.
 - Use `hide()` method to just hide it.
 - Use `collapse()` method to collapse a grouping command (`seq()` or `par()`) and hide its children.
+
+
+## Other
+
+The quiet mode suppresses log messages and only the final result (1 line, whether completed or not) is printed.
+
+```js
+sltr.config.setQuiet();
+```
