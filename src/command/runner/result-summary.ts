@@ -9,7 +9,7 @@ import {
   EventRecord,
 } from "../types";
 import { depthFirstSearch } from "../tools/traverse";
-import { Recorder } from "./record";
+import { Recorder, calcDurationSec } from "./record";
 import { shouldCalc } from "./predicates";
 
 const { Unit, Group } = CommandType;
@@ -27,16 +27,6 @@ const getResultType = (history: EventRecord[]): string => {
     case Event.Failure:
       return "err";
   }
-};
-
-const calcDurationSec = (history: EventRecord[]): number => {
-  const len = history.length;
-  if (!len) return 0;
-
-  const first = history[0].timestamp;
-  const last = history[len - 1].timestamp;
-
-  return (last - first) / 1000;
 };
 
 const resultTypeWidth = 4;

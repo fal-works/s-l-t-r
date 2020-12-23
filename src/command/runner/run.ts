@@ -2,7 +2,7 @@ import { error, log, newLine } from "../../log";
 import { resultSummaryType } from "../../config";
 import { Command, Event, EventHandler, Result } from "../types";
 import { CallbackFunction, depthFirstSearch } from "../tools/traverse";
-import { createRecorder } from "./record";
+import { calcDurationSec, createRecorder } from "./record";
 import { renderResultSummary } from "./result-summary";
 import { shouldCalc } from "./predicates";
 
@@ -60,7 +60,12 @@ export const run = async (
     newLine();
   }
 
-  if (numComplete === numTotal) log("Successfully completed. Maybe.");
+  if (numComplete === numTotal) {
+    const totalDuration = calcDurationSec(recorder.getHistory(command));
+    const totalDurationStr = totalDuration.toFixed(2);
+
+    log(`Successfully completed. Maybe. (total ${totalDurationStr}s)\n`);
+  }
 
   return recorder.historyMap;
 };

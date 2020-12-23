@@ -39,3 +39,13 @@ export const createRecorder = (): Recorder => ({
   record,
   getHistory,
 });
+
+export const calcDurationSec = (history: EventRecord[]): number => {
+  const len = history.length;
+  if (!len) return 0;
+
+  const first = history[0].timestamp;
+  const last = history[len - 1].timestamp;
+
+  return (last - first) / 1000;
+};
